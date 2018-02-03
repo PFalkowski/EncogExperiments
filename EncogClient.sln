@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2024
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncogHelloWorld", "EncogClient\EncogHelloWorld.csproj", "{DF385F84-14F8-4DCF-827D-83B51785535A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksData", "StocksData\StocksData.csproj", "{585FCFEA-A593-405F-8198-0A64BBA5EFCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksData.UnitTests", "StocksData.UnitTests\StocksData.UnitTests.csproj", "{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LooslyCoupledNeuralNet", "LooslyCoupledNeuralNet\LooslyCoupledNeuralNet.csproj", "{6EE4F87E-D199-4286-BE81-F81157F0AD3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloLooslyCoupledNet", "HelloLooslyCoupledNet\HelloLooslyCoupledNet.csproj", "{6E1A336B-09D3-4DC0-A2C0-B507C51EC79E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncogHelloMbankConsole", "EncogHelloMbankConsole\EncogHelloMbankConsole.csproj", "{5358011E-FBF5-41D5-8A7A-762383E8E738}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF385F84-14F8-4DCF-827D-83B51785535A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF385F84-14F8-4DCF-827D-83B51785535A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF385F84-14F8-4DCF-827D-83B51785535A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF385F84-14F8-4DCF-827D-83B51785535A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585FCFEA-A593-405F-8198-0A64BBA5EFCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585FCFEA-A593-405F-8198-0A64BBA5EFCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585FCFEA-A593-405F-8198-0A64BBA5EFCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585FCFEA-A593-405F-8198-0A64BBA5EFCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EE4F87E-D199-4286-BE81-F81157F0AD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE4F87E-D199-4286-BE81-F81157F0AD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EE4F87E-D199-4286-BE81-F81157F0AD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE4F87E-D199-4286-BE81-F81157F0AD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1A336B-09D3-4DC0-A2C0-B507C51EC79E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1A336B-09D3-4DC0-A2C0-B507C51EC79E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1A336B-09D3-4DC0-A2C0-B507C51EC79E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E1A336B-09D3-4DC0-A2C0-B507C51EC79E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FBDA2E73-A208-4672-912A-19034F93CE0C}
+	EndGlobalSection
+EndGlobal
