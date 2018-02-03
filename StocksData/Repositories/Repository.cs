@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
-using Z.EntityFramework.Extensions;
 using Dapper;
 
 namespace StocksData.Repositories

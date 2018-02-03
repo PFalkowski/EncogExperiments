@@ -54,12 +54,12 @@ namespace StocksData.UnitTests
             using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
             {
                 //unitOfWork.StockRepository.AddRange(allStocks);
-                unitOfWork.StockRepository.AddRangeBulk(allStocks);
-                //foreach (var stock in allStocks)
-                //{
-                //    unitOfWork.StockRepository.AddOrUpdate(stock);
-                //    unitOfWork.Complete();
-                //}
+                //unitOfWork.StockRepository.AddRangeBulk(allStocks);
+                foreach (var stock in allStocks)
+                {
+                    unitOfWork.StockRepository.AddOrUpdate(stock);
+                    unitOfWork.Complete();
+                }
                 unitOfWork.Complete();
             }
             //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));

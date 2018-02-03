@@ -24,7 +24,7 @@ namespace StocksData.UnitsOfWork
         
         public int Complete()
         {
-            _context.BulkSaveChanges(true);
+            _context.SaveChanges();
             return 1; 
         }
 
