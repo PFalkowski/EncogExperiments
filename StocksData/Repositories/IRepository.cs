@@ -13,6 +13,8 @@ namespace StocksData.Repositories
         void Add(TEntity entity);
         void AddOrUpdate(TEntity entity);
         void AddRange(IEnumerable<TEntity> entities);
+        void AddRangeBulk(IEnumerable<TEntity> entities);
+        void AddBulk(TEntity entity);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
     }

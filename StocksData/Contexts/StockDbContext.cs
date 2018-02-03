@@ -10,6 +10,6 @@ namespace StocksData.Contexts
         {
             Database.SetInitializer<StockDbContext>(new CreateDatabaseIfNotExists<StockDbContext>());
         }
-        public virtual DbSet<StockQuote> StockQuotes { get; set; }
+        public virtual DbSet<Company> StockCompaniesQuotes { get; set; }
     }
 }

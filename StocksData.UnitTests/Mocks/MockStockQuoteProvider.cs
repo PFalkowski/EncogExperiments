@@ -13,6 +13,6 @@ namespace StocksData.UnitTests.Mocks
         private static readonly Lazy<List<StockQuote>> MbankLazy = new Lazy<List<StockQuote>>(
             () => Encoding.UTF8.GetString(Properties.Resources.MBANK).DeserializeFromCsv<StockQuote>(new StockQuoteCsvClassMap()).ToList());
 
-        public static List<StockQuote> Mbank => MbankLazy.Value;
+        public static Company Mbank => new Company {Ticker = "MBANK", Quotes = MbankLazy.Value};
     }
 }

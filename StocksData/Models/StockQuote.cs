@@ -8,9 +8,11 @@ namespace StocksData.Models
         [Key]
         [Column(Order = 1)]
         public string Ticker { get; set; }
+
         [Key]
         [Column(Order = 2)]
         public int Date { get; set; }
+
         public double Open { get; set; }
         public double High { get; set; }
         public double Low { get; set; }

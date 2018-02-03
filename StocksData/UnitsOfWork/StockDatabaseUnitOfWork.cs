@@ -9,22 +9,23 @@ namespace StocksData.UnitsOfWork
     public sealed class StockDatabaseUnitOfWork : IStockUnitOfWork
     {
         private readonly StockDbContext _context;
-        public IRepository<StockQuote> StockRepository { get; set; }
+        public IRepository<Company> StockRepository { get; set; }
 
         public StockDatabaseUnitOfWork(StockDbContext context)
         {
             _context = context;
-            StockRepository = new Repository<StockQuote>(context);
+            StockRepository = new Repository<Company>(context);
         }
 
         public int LastDate()
         {
-            return StockRepository.Entities.Max(e => e.Date);
+            return StockRepository.Entities.First().Quotes.Max(e => e.Date);
         }
         
         public int Complete()
         {
-            return _context.SaveChanges();
+            _context.BulkSaveChanges(true);
+            return 1; 
         }
 
         public Task<int> CompleteAsync()

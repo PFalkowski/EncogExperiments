@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,53 +19,62 @@ namespace StocksData.UnitTests
         [Fact]
         public void ReadAllFilesFromDirAndSaveToCsvRepo()
         {
-            //CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
-            var allFiles = new IOService().ReadDirectory("C:\\Users\\John\\Downloads\\mstcgl", "*.mst");
-            var allStocks = new List<List<StockQuote>>(allFiles.Count);
+            var allFiles = new IOService().ReadDirectory(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var allStocks = new List<Company>(allFiles.Count);
 
-            //foreach (var file in allFiles)
-            //{
-            //    var deserialized = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
-            //    allStocks.Add(deserialized);
-            //}
             Parallel.ForEach(allFiles,
                 delegate (KeyValuePair<string, string> file)
                 {
-                    allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList());
+                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
+                    //if (deserializedQuotes.Count < 200) return;
+                    if (file.Key != deserializedQuotes.First().Ticker) throw new Exception($"{file.Key} != {deserializedQuotes.First().Ticker}");
+
+                    allStocks.Add(new Company
+                    {
+                        Ticker = deserializedQuotes.First().Ticker,
+                        Quotes = deserializedQuotes
+                    });
                 });
             var outputFile = new FileInfo("test23443.txt");
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<StockQuote>(outputFile)))
+            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<Company>(outputFile)))
             {
                 foreach (var stock in allStocks)
                 {
-                    unitOfWork.StockRepository.AddRange(stock);
+                    unitOfWork.StockRepository.AddOrUpdate(stock);
+                    unitOfWork.Complete();
                 }
-                unitOfWork.Complete();
             }
 
         }
         [Fact]
         public void GetSpecificRecordFromCsvRepo()
         {
-            var allFiles = new IOService().ReadDirectory("C:\\Users\\John\\Downloads\\mstcgl", "*.mst");
-            var allStocks = new List<List<StockQuote>>(allFiles.Count);
+
+            var allFiles = new IOService().ReadDirectory(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var allStocks = new List<Company>(allFiles.Count);
 
             Parallel.ForEach(allFiles,
                 delegate (KeyValuePair<string, string> file)
                 {
-                    allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList());
+                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
+                    if (deserializedQuotes.Count < 200) return;
+                    if (file.Key != deserializedQuotes.First().Ticker) throw new Exception($"{file.Key} != {deserializedQuotes.First().Ticker}");
+
+                    allStocks.Add(new Company
+                    {
+                        Ticker = deserializedQuotes.First().Ticker,
+                        Quotes = deserializedQuotes
+                    });
                 });
-
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<StockQuote>(new FileInfo("test232443.txt"))))
+            var outputFile = new FileInfo("test23443.txt");
+            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<Company>(outputFile)))
             {
-                foreach (var stock in allStocks)
-                {
-                    unitOfWork.StockRepository.AddRange(stock);
-                }
+                unitOfWork.StockRepository.AddRange(allStocks);
 
-                var oneFile = unitOfWork.StockRepository.Entities.Where(x => x.Ticker == "MBANK").ToList();
-                unitOfWork.StockRepository.RemoveRange(oneFile);
+                var oneStock = unitOfWork.StockRepository.Entities.FirstOrDefault(x => x.Ticker == "MBANK");
+                unitOfWork.StockRepository.Remove(oneStock);
+
                 unitOfWork.Complete();
             }
         }

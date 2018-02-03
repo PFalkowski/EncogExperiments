@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
 using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Contexts;
@@ -24,44 +27,39 @@ namespace StocksData.UnitTests
 
             using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContext(connectionStr)))
             {
-                unitOfWork.StockRepository.AddRange(mbank);
+                unitOfWork.StockRepository.Add(mbank);
                 unitOfWork.Complete();
             }
         }
 
-
         [Fact]
-        public void Test()
-        {
-            var mbank = MockStockQuoteProvider.Mbank;
-            var res = mbank.Count;
-        }
-
-
-        [Fact]
-        public void ReadAllFilesFromDirAndSaveToDb()
+        public void ReadAllFilesFromDirAndSaveToDbAsCompanyStockQuotes()
         {
 
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             var allFiles = new IOService().ReadDirectory("C:\\Users\\John\\Downloads\\mstcgl", "*.mst");
-            var allStocks = new List<List<StockQuote>>(allFiles.Count);
+            var allStocks = new List<Company>(allFiles.Count);
 
             Parallel.ForEach(allFiles,
                 delegate (KeyValuePair<string, string> file)
                 {
-                    allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList());
+                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
+                    if (!string.Equals(Path.GetFileNameWithoutExtension(file.Key), deserializedQuotes.First().Ticker, StringComparison.InvariantCulture)) throw new Exception($"{Path.GetFileNameWithoutExtension(file.Key)} != {deserializedQuotes.First().Ticker}");
+
+                    allStocks.Add(new Company { Ticker = deserializedQuotes.First().Ticker, Quotes = deserializedQuotes });
                 });
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            
+
             using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
             {
-                for (var i = 0; i < allStocks.Count; ++i)
-                {
-                    unitOfWork.StockRepository.AddRange(allStocks[i]);
-                    //if (i % 10 == 0)
-                        unitOfWork.Complete();
-                }
+                //unitOfWork.StockRepository.AddRange(allStocks);
+                unitOfWork.StockRepository.AddRangeBulk(allStocks);
+                //foreach (var stock in allStocks)
+                //{
+                //    unitOfWork.StockRepository.AddOrUpdate(stock);
+                //    unitOfWork.Complete();
+                //}
                 unitOfWork.Complete();
             }
             //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));

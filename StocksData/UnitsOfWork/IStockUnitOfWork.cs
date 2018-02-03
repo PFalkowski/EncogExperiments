@@ -5,6 +5,6 @@ namespace StocksData.UnitsOfWork
 {
     public interface IStockUnitOfWork : IUnitOfWork
     {
-        IRepository<StockQuote> StockRepository { get; set; }
+        IRepository<Company> StockRepository { get; set; }
     }
 }

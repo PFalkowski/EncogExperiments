@@ -72,5 +72,15 @@ namespace StocksData.Repositories
                 Add(entity);
             }
         }
+
+        public void AddRangeBulk(IEnumerable<TEntity> entities)
+        {
+            AddRange(entities);
+        }
+
+        public void AddBulk(TEntity entity)
+        {
+            Add(entity);
+        }
     }
 }

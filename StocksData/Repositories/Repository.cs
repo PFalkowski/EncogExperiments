@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Linq.Expressions;
+using Z.EntityFramework.Extensions;
+using Dapper;
 
 namespace StocksData.Repositories
 {
@@ -22,6 +25,10 @@ namespace StocksData.Repositories
         public TEntity Get(object id)
         {
             return EntitiesDbSet.Find(id);
+        }
+        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
+        {
+            return EntitiesDbSet.FirstOrDefault(predicate);
         }
 
         public List<TEntity> GetAll(Predicate<TEntity> match)
@@ -53,7 +60,7 @@ namespace StocksData.Repositories
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().RemoveRange(entities);
+            ((DbSet<TEntity>)EntitiesDbSet).RemoveRange(entities);
         }
 
         public void AddOrUpdate(TEntity entity)

@@ -8,13 +8,13 @@ namespace StocksData.UnitsOfWork
 {
     public sealed class StockCsvFUnitOfWork : IStockUnitOfWork
     {
-        private readonly StockCsvContextEager<StockQuote> _context;
-        public IRepository<StockQuote> StockRepository { get; set ; }
+        private readonly StockCsvContextEager<Company> _context;
+        public IRepository<Company> StockRepository { get; set ; }
 
-        public StockCsvFUnitOfWork(StockCsvContextEager<StockQuote> context)
+        public StockCsvFUnitOfWork(StockCsvContextEager<Company> context)
         {
             _context = context;
-            StockRepository = new CsvRepo<StockQuote>(context);
+            StockRepository = new CsvRepo<Company>(context);
         }
 
         public int Complete()
