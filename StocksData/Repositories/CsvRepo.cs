@@ -37,7 +37,7 @@ namespace StocksData.Repositories
             return EntitiesList.FindAll(match);
         }
 
-        public List<TEntity> GetAll()
+        public IList<TEntity> GetAll()
         {
             return EntitiesList;
         }

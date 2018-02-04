@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Contexts;
+using StocksData.Mappings;
 using StocksData.Models;
 using StocksData.Services;
 using StocksData.UnitsOfWork;

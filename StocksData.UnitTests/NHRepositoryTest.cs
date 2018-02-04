@@ -8,6 +8,7 @@ using CsvHelper;
 using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Contexts;
+using StocksData.Mappings;
 using StocksData.Models;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
@@ -16,7 +17,7 @@ using Xunit;
 
 namespace StocksData.UnitTests
 {
-    public class RepositoryTest
+    public class NHRepositoryTest
     {
         [Fact]
         public void RepositoryCanBeCreatedWithDbContext()
@@ -25,9 +26,9 @@ namespace StocksData.UnitTests
             var mbank = MockStockQuoteProvider.Mbank;
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
-            using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContext(connectionStr)))
+            using (var unitOfWork = new StockNHUnitOfWork(new StockNHContextModelUpdate(connectionStr)))
             {
-                unitOfWork.StockRepository.Add(mbank);
+                unitOfWork.StocksRepository.Add(mbank);
                 unitOfWork.Complete();
             }
         }
@@ -51,10 +52,9 @@ namespace StocksData.UnitTests
                 });
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
+            using (var unitOfWork = new StockEFUnitOfWork(new StockEFContextModelUpdate(connectionStr)))
             {
                 //unitOfWork.StockRepository.AddRange(allStocks);
-                //unitOfWork.StockRepository.AddRangeBulk(allStocks);
                 foreach (var stock in allStocks)
                 {
                     unitOfWork.StockRepository.AddOrUpdate(stock);
@@ -65,18 +65,18 @@ namespace StocksData.UnitTests
             //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
 
         }
-        [Fact]
-        public void GetSpecificStock()
-        {
-            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        //[Fact]
+        //public void GetSpecificStock()
+        //{
+        //    const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
-            {
-                unitOfWork.StockRepository.GetAll((x) => x.Ticker == "MBANK");
-                unitOfWork.Complete();
-            }
-            //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
+        //    using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
+        //    {
+        //        unitOfWork.StockRepository.GetAll((x) => x.Ticker == "MBANK");
+        //        unitOfWork.Complete();
+        //    }
+        //    //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
 
-        }
+        //}
     }
 }

@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using CsvHelper;
+using Extensions.Serialization;
+using StocksData.Adapters;
+using StocksData.Contexts;
+using StocksData.Mappings;
+using StocksData.Models;
+using StocksData.Services;
+using StocksData.UnitsOfWork;
+using StocksData.UnitTests.Mocks;
+using Xunit;
+
+namespace StocksData.UnitTests
+{
+    public class EFRepositoryTest
+    {
+        [Fact]
+        public void RepositoryCanBeCreatedWithDbContext()
+        {
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            var mbank = MockStockQuoteProvider.Mbank;
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
+
+            using (var unitOfWork = new StockEFUnitOfWork(new StockEFContext(connectionStr)))
+            {
+                unitOfWork.StockRepository.Add(mbank);
+                unitOfWork.Complete();
+            }
+        }
+
+        [Fact]
+        public void ReadAllFilesFromDirAndSaveToDbAsCompanyStockQuotes()
+        {
+
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+            var allFiles = new IOService().ReadDirectory("C:\\Users\\John\\Downloads\\mstcgl", "*.mst");
+            var allStocks = new List<Company>(allFiles.Count);
+
+            Parallel.ForEach(allFiles,
+                delegate (KeyValuePair<string, string> file)
+                {
+                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
+                    if (!string.Equals(Path.GetFileNameWithoutExtension(file.Key), deserializedQuotes.First().Ticker, StringComparison.InvariantCulture)) throw new Exception($"{Path.GetFileNameWithoutExtension(file.Key)} != {deserializedQuotes.First().Ticker}");
+
+                    allStocks.Add(new Company { Ticker = deserializedQuotes.First().Ticker, Quotes = deserializedQuotes });
+                });
+            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+            using (var unitOfWork = new StockEFUnitOfWork(new StockEFContextModelUpdate(connectionStr)))
+            {
+                //unitOfWork.StockRepository.AddRange(allStocks);
+                foreach (var stock in allStocks)
+                {
+                    unitOfWork.StockRepository.AddOrUpdate(stock);
+                    unitOfWork.Complete();
+                }
+                unitOfWork.Complete();
+            }
+            //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
+
+        }
+        //[Fact]
+        //public void GetSpecificStock()
+        //{
+        //    const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        //    using (var unitOfWork = new StockDatabaseUnitOfWork(new StockDbContextModelUpdate(connectionStr)))
+        //    {
+        //        unitOfWork.StockRepository.GetAll((x) => x.Ticker == "MBANK");
+        //        unitOfWork.Complete();
+        //    }
+        //    //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
+
+        //}
+    }
+}

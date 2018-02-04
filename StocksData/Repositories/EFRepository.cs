@@ -8,7 +8,7 @@ using Dapper;
 
 namespace StocksData.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
+    public class EFRepository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
     {
         public DbContext Context { get; }
 
@@ -16,7 +16,7 @@ namespace StocksData.Repositories
 
         public IEnumerable<TEntity> Entities => EntitiesDbSet;
 
-        public Repository(DbContext context)
+        public EFRepository(DbContext context)
         {
             this.Context = context;
         }
@@ -25,17 +25,18 @@ namespace StocksData.Repositories
         {
             return EntitiesDbSet.Find(id);
         }
+
         public TEntity Get(Expression<Func<TEntity, bool>> predicate)
         {
             return EntitiesDbSet.FirstOrDefault(predicate);
         }
 
-        public List<TEntity> GetAll(Predicate<TEntity> match)
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
-            return GetAll().FindAll(match);
+            return EntitiesDbSet.Where(predicate);
         }
 
-        public List<TEntity> GetAll()
+        public IList<TEntity> GetAll()
         {
             return EntitiesDbSet.ToList();
         }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace StocksData.Models
 {
@@ -7,25 +8,25 @@ namespace StocksData.Models
     {
         [Key]
         [Column(Order = 1)]
-        public string Ticker { get; set; }
+        public virtual string Ticker { get; set; }
 
         [Key]
         [Column(Order = 2)]
-        public int Date { get; set; }
+        public virtual int Date { get; set; }
 
-        public double Open { get; set; }
-        public double High { get; set; }
-        public double Low { get; set; }
-        public double Close { get; set; }
-        public double Volume { get; set; }
+        public virtual double Open { get; set; }
+        public virtual double High { get; set; }
+        public virtual double Low { get; set; }
+        public virtual double Close { get; set; }
+        public virtual double Volume { get; set; }
 
-        public bool ValueEquals(StockQuote other)
+        public virtual bool ValueEquals(StockQuote other)
         {
             return other.Ticker == Ticker &&
                    other.Date == Date;
         }
 
-        public bool IsValid()
+        public virtual bool IsValid()
         {
             return Open > 0 &&
                    High > 0 &&
@@ -36,6 +37,23 @@ namespace StocksData.Models
                    Close >= Low &&
                    Open <= High &&
                    Close <= High;
+        }
+
+        public virtual bool Equals(object obj)
+        {
+            var cast = obj as StockQuote;
+            if (cast == null) return false;
+            return this.ValueEquals(cast);
+        }
+
+        public virtual int GetHashCode()
+        {
+            return Date + Ticker.Select(x => int.Parse(x.ToString())).Sum();
+        }
+
+        public virtual string ToString()
+        {
+            return $"{Ticker} {Date}";
         }
     }
 }

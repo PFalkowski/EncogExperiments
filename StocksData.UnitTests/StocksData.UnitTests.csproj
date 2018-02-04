@@ -77,7 +77,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RepositoryTest.cs" />
+    <Compile Include="NHRepositoryTest.cs" />
+    <Compile Include="EFRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

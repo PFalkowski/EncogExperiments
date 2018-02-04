@@ -12,10 +12,10 @@ namespace StocksData.Models
     {
         [Key]
         [ForeignKey(nameof(Quotes))]
-        public string Ticker { get; set; }
+        public virtual string Ticker { get; set; }
         public virtual ICollection<StockQuote> Quotes { get; set; }
 
-        public override string ToString()
+        public virtual string ToString()
         {
             return Ticker;
         }

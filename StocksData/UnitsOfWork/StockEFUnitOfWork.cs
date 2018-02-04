@@ -6,15 +6,15 @@ using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
-    public sealed class StockDatabaseUnitOfWork : IStockUnitOfWork
+    public sealed class StockEFUnitOfWork : IStockUnitOfWork
     {
-        private readonly StockDbContext _context;
+        private StockEFContext Context { get; }
         public IRepository<Company> StockRepository { get; set; }
 
-        public StockDatabaseUnitOfWork(StockDbContext context)
+        public StockEFUnitOfWork(StockEFContext context)
         {
-            _context = context;
-            StockRepository = new Repository<Company>(context);
+            Context = context;
+            StockRepository = new EFRepository<Company>(context);
         }
 
         public int LastDate()
@@ -24,18 +24,18 @@ namespace StocksData.UnitsOfWork
         
         public int Complete()
         {
-            _context.SaveChanges();
+            Context.SaveChanges();
             return 1; 
         }
 
         public Task<int> CompleteAsync()
         {
-            return _context.SaveChangesAsync();
+            return Context.SaveChangesAsync();
         }
 
         public void Dispose()
         {
-            _context.Dispose();
+            Context.Dispose();
         }
     }
 }

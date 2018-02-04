@@ -8,8 +8,7 @@ namespace StocksData.Repositories
     {
         IEnumerable<TEntity> Entities { get; }
         TEntity Get(object id);
-        List<TEntity> GetAll(Predicate<TEntity> match);
-        List<TEntity> GetAll();
+        IList<TEntity> GetAll();
         void Add(TEntity entity);
         void AddOrUpdate(TEntity entity);
         void AddRange(IEnumerable<TEntity> entities);

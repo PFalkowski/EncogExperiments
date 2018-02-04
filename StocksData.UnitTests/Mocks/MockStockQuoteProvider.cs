@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Extensions.Serialization;
 using StocksData.Adapters;
+using StocksData.Mappings;
 using StocksData.Models;
 
 namespace StocksData.UnitTests.Mocks

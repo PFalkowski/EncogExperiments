@@ -9,7 +9,7 @@ namespace StocksData.UnitTests.Mocks
     {
         public StockQuoteTestContext(IDbConnection connection) : base(connection.ConnectionString)
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<StockDbContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<StockEFContext>());
         }
         public virtual DbSet<StockQuote> StockQuotes { get; set; }
     }
