@@ -86,22 +86,20 @@
     <Compile Include="Adapters\StockQuoteToBasicMLDataSetAvgConverter.cs" />
     <Compile Include="Adapters\StockQuotesToNormalizedMatrix.cs" />
     <Compile Include="Contexts\INhContext.cs" />
-    <Compile Include="Contexts\StockEFContextModelUpdate.cs" />
+    <Compile Include="Contexts\StockEfContextModelUpdate.cs" />
     <Compile Include="Contexts\StockCsvContextEager.cs" />
-    <Compile Include="Contexts\StockNHContext.cs" />
-    <Compile Include="Contexts\StockNHContextModelUpdate.cs" />
+    <Compile Include="Contexts\StockNhContext.cs" />
+    <Compile Include="Contexts\StockNhContextModelUpdate.cs" />
     <Compile Include="Mappings\CompanyMap.cs" />
     <Compile Include="Mappings\StockQuoteMap.cs" />
-    <Compile Include="Models\Company.cs" />
     <Compile Include="Repositories\CsvRepo.cs" />
     <Compile Include="Repositories\EfRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Models\StockQuote.cs" />
     <Compile Include="Repositories\NhRepository.cs" />
     <Compile Include="Repositories\StockRepository.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="UnitsOfWork\IUnitOfWork.cs" />
-    <Compile Include="Contexts\StockEFContext.cs" />
+    <Compile Include="Contexts\StockEfContext.cs" />
     <Compile Include="Contexts\StockCsvContextLazy.cs" />
     <Compile Include="UnitsOfWork\StockNhUnitOfWork.cs" />
     <Compile Include="UnitsOfWork\StockCsvFileUnitOfWork.cs" />
@@ -115,6 +113,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
+      <Project>{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}</Project>
+      <Name>StocksData.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

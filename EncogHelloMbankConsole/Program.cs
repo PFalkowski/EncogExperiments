@@ -16,7 +16,7 @@ using Extensions.Standard;
 using LoggerLite;
 using StocksData.Adapters;
 using StocksData.Contexts;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
 

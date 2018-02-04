@@ -9,7 +9,7 @@ using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Contexts;
 using StocksData.Mappings;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
 using StocksData.UnitTests.Mocks;
@@ -26,7 +26,7 @@ namespace StocksData.UnitTests
             var mbank = MockStockQuoteProvider.Mbank;
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
-            using (var unitOfWork = new StockEfUnitOfWork(new StockEFContextModelUpdate(connectionStr)))
+            using (var unitOfWork = new StockEfUnitOfWork(new StockEfContextModelUpdate(connectionStr)))
             {
                 unitOfWork.Stocks.Repository.Add(mbank);
                 unitOfWork.Complete();
@@ -52,7 +52,7 @@ namespace StocksData.UnitTests
                 });
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            using (var unitOfWork = new StockEfUnitOfWork(new StockEFContextModelUpdate(connectionStr)))
+            using (var unitOfWork = new StockEfUnitOfWork(new StockEfContextModelUpdate(connectionStr)))
             {
                 //unitOfWork.StockRepository.AddRange(allStocks);
                 foreach (var stock in allStocks)

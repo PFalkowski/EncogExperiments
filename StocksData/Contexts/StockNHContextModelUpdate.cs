@@ -11,10 +11,10 @@ using StocksData.Mappings;
 
 namespace StocksData.Contexts
 {
-    public class StockNHContextModelUpdate : INhContext
+    public class StockNhContextModelUpdate : INhContext
     {
         public ISessionFactory SessionFactory { get; }
-        public StockNHContextModelUpdate(string connectionString)
+        public StockNhContextModelUpdate(string connectionString)
         {
             SessionFactory = Fluently.Configure()
                 .Database(MsSqlConfiguration.MsSql2012

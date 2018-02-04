@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NHibernate;
 using StocksData.Contexts;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork

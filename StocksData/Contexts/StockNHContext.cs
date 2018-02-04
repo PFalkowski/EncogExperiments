@@ -5,10 +5,10 @@ using StocksData.Mappings;
 
 namespace StocksData.Contexts
 {
-    public class StockNHContext : INhContext
+    public class StockNhContext : INhContext
     {
         public ISessionFactory SessionFactory { get; }
-        public StockNHContext(string connectionString)
+        public StockNhContext(string connectionString)
         {
             SessionFactory = Fluently.Configure()
                     .Database(MsSqlConfiguration.MsSql2012

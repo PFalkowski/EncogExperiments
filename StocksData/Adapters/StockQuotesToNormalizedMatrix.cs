@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Encog.ML.Data.Basic;
 using Encog.Util.Arrayutil;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Adapters
 {

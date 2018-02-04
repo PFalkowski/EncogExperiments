@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace StocksData.Contexts
 {
-    public class StockEFContextModelUpdate : StockEFContext
+    public class StockEfContextModelUpdate : StockEfContext
     {
-        public StockEFContextModelUpdate(string connectionStr) : base(connectionStr)
+        public StockEfContextModelUpdate(string connectionStr) : base(connectionStr)
         {
-            Database.SetInitializer<StockEFContext>(new DropCreateDatabaseIfModelChanges<StockEFContext>());
+            Database.SetInitializer<StockEfContext>(new DropCreateDatabaseIfModelChanges<StockEfContext>());
         }
     }
 }

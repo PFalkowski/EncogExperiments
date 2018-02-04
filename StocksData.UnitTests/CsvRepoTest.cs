@@ -8,7 +8,7 @@ using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Contexts;
 using StocksData.Mappings;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
 using Xunit;

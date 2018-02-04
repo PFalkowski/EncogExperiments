@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Repositories
 {

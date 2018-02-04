@@ -1,5 +1,5 @@
 ﻿using CsvHelper.Configuration;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Mappings
 {

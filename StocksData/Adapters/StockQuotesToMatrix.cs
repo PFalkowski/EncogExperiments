@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using StocksData.Models;
+using StocksData.Model;
+using StocksData.Model;
 
 namespace StocksData.Adapters
 {

@@ -65,6 +65,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
+      <Project>{dd62dde9-77cd-4900-bd2b-9f9abc197993}</Project>
+      <Name>StocksData.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StocksData\StocksData.csproj">
       <Project>{585fcfea-a593-405f-8198-0a64bba5efcc}</Project>
       <Name>StocksData</Name>

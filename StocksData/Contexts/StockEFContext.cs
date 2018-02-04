@@ -1,14 +1,15 @@
 ﻿using System.Data;
 using System.Data.Entity;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Contexts
 {
-    public class StockEFContext : DbContext
+    public class StockEfContext : DbContext
     {
-        public StockEFContext(string connectionStr) : base(connectionStr)
+        public StockEfContext(string connectionStr) : base(connectionStr)
         {
-            Database.SetInitializer<StockEFContext>(new CreateDatabaseIfNotExists<StockEFContext>());
+            Database.SetInitializer<StockEfContext>(new CreateDatabaseIfNotExists<StockEfContext>());
         }
+        public virtual DbSet<Company> StockCompaniesQuotes { get; set; }
     }
 }

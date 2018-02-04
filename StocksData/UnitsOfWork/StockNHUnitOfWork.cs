@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StocksData.Contexts;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork

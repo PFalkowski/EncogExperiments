@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using StocksData.Contexts;
-using StocksData.Models;
+using StocksData.Model;
 using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
     public abstract class EfUnitOfWork : IUnitOfWork
     {
-        private StockEFContext Context { get; }
+        private StockEfContext Context { get; }
 
-        public EfUnitOfWork(StockEFContext context)
+        public EfUnitOfWork(StockEfContext context)
         {
             Context = context;
         }

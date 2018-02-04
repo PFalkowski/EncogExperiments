@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Encog.ML.Data.Basic;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Adapters
 {

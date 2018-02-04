@@ -5,7 +5,7 @@ using System.Text;
 using Extensions.Serialization;
 using StocksData.Adapters;
 using StocksData.Mappings;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.UnitTests.Mocks
 {

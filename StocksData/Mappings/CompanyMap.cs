@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Mapping;
 using NHibernate.Linq;
-using StocksData.Models;
+using StocksData.Model;
 
 namespace StocksData.Mappings
 {
