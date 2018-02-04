@@ -3,43 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NHibernate;
 using StocksData.Contexts;
 using StocksData.Models;
 using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
-    public class StockNHUnitOfWork : IUnitOfWork
+    public class StockNhUnitOfWork : NhUnitOfWork
     {
-        private ISession Session { get; }
-        public IRepository<Company> StocksRepository { get; }
-
-        public StockNHUnitOfWork(IStockNHContext context)
+        public StockRepository Stocks { get; }
+        public StockNhUnitOfWork(INhContext context) : base(context)
         {
-            Session = context.SessionFactory.
-                OpenSession();
-            Session.BeginTransaction();
-            StocksRepository = new NHRepository<Company>(Session);
-        }
-
-        public int Complete()
-        {
-            Session.Flush();
-            Session.Transaction.Commit();
-            return 1;
-        }
-
-        public async Task<int> CompleteAsync()
-        {
-            await Session.FlushAsync();
-            await Session.Transaction.CommitAsync();
-            return 1;
-        }
-
-        public void Dispose()
-        {
-            Session.Dispose();
+            Stocks = new StockRepository(new NhRepository<Company>(context.SessionFactory.OpenSession()));
         }
     }
 }

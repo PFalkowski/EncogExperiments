@@ -8,13 +8,13 @@ using NHibernate;
 
 namespace StocksData.Repositories
 {
-    public class NHRepository<T> : IRepository<T> where T : class
+    public class NhRepository<T> : IRepository<T> where T : class
     {
         public IEnumerable<T> Entities => Session.Query<T>();
 
         public ISession Session { get; }
 
-        public NHRepository(ISession session)
+        public NhRepository(ISession session)
         {
             Session = session;
         }

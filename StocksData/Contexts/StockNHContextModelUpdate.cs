@@ -11,7 +11,7 @@ using StocksData.Mappings;
 
 namespace StocksData.Contexts
 {
-    public class StockNHContextModelUpdate : IStockNHContext
+    public class StockNHContextModelUpdate : INhContext
     {
         public ISessionFactory SessionFactory { get; }
         public StockNHContextModelUpdate(string connectionString)

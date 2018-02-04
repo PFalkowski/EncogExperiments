@@ -26,9 +26,9 @@ namespace StocksData.UnitTests
             var mbank = MockStockQuoteProvider.Mbank;
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
-            using (var unitOfWork = new StockNHUnitOfWork(new StockNHContextModelUpdate(connectionStr)))
+            using (var unitOfWork = new StockNhUnitOfWork(new StockNHContextModelUpdate(connectionStr)))
             {
-                unitOfWork.StocksRepository.Add(mbank);
+                unitOfWork.Stocks.Repository.Add(mbank);
                 unitOfWork.Complete();
             }
         }
@@ -52,12 +52,12 @@ namespace StocksData.UnitTests
                 });
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            using (var unitOfWork = new StockEFUnitOfWork(new StockEFContextModelUpdate(connectionStr)))
+            using (var unitOfWork = new StockNhUnitOfWork(new StockNHContext(connectionStr)))
             {
                 //unitOfWork.StockRepository.AddRange(allStocks);
                 foreach (var stock in allStocks)
                 {
-                    unitOfWork.StockRepository.AddOrUpdate(stock);
+                    unitOfWork.Stocks.Repository.AddOrUpdate(stock);
                     unitOfWork.Complete();
                 }
                 unitOfWork.Complete();

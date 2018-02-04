@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        int Complete();
-        Task<int> CompleteAsync();
+        void Complete();
+        Task CompleteAsync();
     }
 }

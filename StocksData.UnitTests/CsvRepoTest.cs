@@ -42,7 +42,7 @@ namespace StocksData.UnitTests
             {
                 foreach (var stock in allStocks)
                 {
-                    unitOfWork.StockRepository.AddOrUpdate(stock);
+                    unitOfWork.Repository.AddOrUpdate(stock);
                     unitOfWork.Complete();
                 }
             }
@@ -71,10 +71,10 @@ namespace StocksData.UnitTests
             var outputFile = new FileInfo("test23443.txt");
             using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<Company>(outputFile)))
             {
-                unitOfWork.StockRepository.AddRange(allStocks);
+                unitOfWork.Repository.AddRange(allStocks);
 
-                var oneStock = unitOfWork.StockRepository.Entities.FirstOrDefault(x => x.Ticker == "MBANK");
-                unitOfWork.StockRepository.Remove(oneStock);
+                var oneStock = unitOfWork.Repository.Entities.FirstOrDefault(x => x.Ticker == "MBANK");
+                unitOfWork.Repository.Remove(oneStock);
 
                 unitOfWork.Complete();
             }

@@ -6,32 +6,31 @@ using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
-    public sealed class StockCsvFUnitOfWork : IStockUnitOfWork
+    public sealed class StockCsvFUnitOfWork : IUnitOfWork
     {
         private readonly StockCsvContextEager<Company> _context;
-        public IRepository<Company> StockRepository { get; set ; }
+        public CsvRepo<Company> Repository { get; set; }
 
         public StockCsvFUnitOfWork(StockCsvContextEager<Company> context)
         {
             _context = context;
-            StockRepository = new CsvRepo<Company>(context);
+            Repository = new CsvRepo<Company>(context);
         }
 
-        public int Complete()
+        public void Complete()
         {
             _context.SaveChanges();
-            return 1;
         }
 
-        public Task<int> CompleteAsync()
+        public Task CompleteAsync()
         {
-            _context.SaveChanges();
-            return new Task<int>(() => 1);
+            return new Task(() =>
+                _context.SaveChanges());
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 }

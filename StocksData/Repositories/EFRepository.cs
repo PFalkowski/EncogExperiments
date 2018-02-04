@@ -8,7 +8,7 @@ using Dapper;
 
 namespace StocksData.Repositories
 {
-    public class EFRepository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
+    public class EfRepository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
     {
         public DbContext Context { get; }
 
@@ -16,7 +16,7 @@ namespace StocksData.Repositories
 
         public IEnumerable<TEntity> Entities => EntitiesDbSet;
 
-        public EFRepository(DbContext context)
+        public EfRepository(DbContext context)
         {
             this.Context = context;
         }
@@ -60,7 +60,8 @@ namespace StocksData.Repositories
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            ((DbSet<TEntity>)EntitiesDbSet).RemoveRange(entities);
+            var list = entities.ToList();
+            ((DbSet<TEntity>)EntitiesDbSet).RemoveRange(list);
         }
 
         public void AddOrUpdate(TEntity entity)

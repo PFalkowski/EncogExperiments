@@ -12,7 +12,7 @@ namespace StocksData.Models
 
         [Key]
         [Column(Order = 2)]
-        public virtual int Date { get; set; }
+        public int Date { get; set; }
 
         public virtual double Open { get; set; }
         public virtual double High { get; set; }

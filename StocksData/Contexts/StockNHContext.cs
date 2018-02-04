@@ -5,7 +5,7 @@ using StocksData.Mappings;
 
 namespace StocksData.Contexts
 {
-    public class StockNHContext : IStockNHContext
+    public class StockNHContext : INhContext
     {
         public ISessionFactory SessionFactory { get; }
         public StockNHContext(string connectionString)

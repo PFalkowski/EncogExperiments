@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using StocksData.Contexts;
 using StocksData.Models;
@@ -6,36 +9,12 @@ using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
-    public sealed class StockEFUnitOfWork : IStockUnitOfWork
+   public  class StockEfUnitOfWork : EfUnitOfWork
     {
-        private StockEFContext Context { get; }
-        public IRepository<Company> StockRepository { get; set; }
-
-        public StockEFUnitOfWork(StockEFContext context)
+        public StockRepository Stocks { get; }
+        public StockEfUnitOfWork(StockEFContext context) : base(context)
         {
-            Context = context;
-            StockRepository = new EFRepository<Company>(context);
-        }
-
-        public int LastDate()
-        {
-            return StockRepository.Entities.First().Quotes.Max(e => e.Date);
-        }
-        
-        public int Complete()
-        {
-            Context.SaveChanges();
-            return 1; 
-        }
-
-        public Task<int> CompleteAsync()
-        {
-            return Context.SaveChangesAsync();
-        }
-
-        public void Dispose()
-        {
-            Context.Dispose();
+            Stocks = new StockRepository(new EfRepository<Company>(context));
         }
     }
 }
