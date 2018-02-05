@@ -52,7 +52,7 @@ namespace StocksData.UnitTests
                 });
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            using (var unitOfWork = new StockNhUnitOfWork(new StockNhContext(connectionStr)))
+            using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
                 //unitOfWork.StockRepository.AddRange(allStocks);
                 foreach (var stock in allStocks)

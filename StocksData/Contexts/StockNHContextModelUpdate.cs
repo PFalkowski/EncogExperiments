@@ -8,6 +8,7 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using StocksData.Mappings;
+using StocksData.Model;
 
 namespace StocksData.Contexts
 {
@@ -18,12 +19,16 @@ namespace StocksData.Contexts
         {
             SessionFactory = Fluently.Configure()
                 .Database(MsSqlConfiguration.MsSql2012
-                    .ConnectionString(connectionString).ShowSql())
+                    .ConnectionString(connectionString)
+                    //.ShowSql
+                )
                 .Mappings(m =>
                     m.FluentMappings
-                        .Add<StockQuoteMap>()
-                        .Add<CompanyMap>()).
-                ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
+                            .AddFromAssemblyOf<StockQuoteMap>()
+                        //.Add<StockQuoteMap>()
+                        //.Add<CompanyMap>()
+                    )
+                .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
                     .BuildSessionFactory();
 
         }

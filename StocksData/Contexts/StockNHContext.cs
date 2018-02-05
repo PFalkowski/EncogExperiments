@@ -2,6 +2,7 @@
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using StocksData.Mappings;
+using StocksData.Model;
 
 namespace StocksData.Contexts
 {
@@ -15,8 +16,8 @@ namespace StocksData.Contexts
                         .ConnectionString(connectionString).ShowSql())
                     .Mappings(m =>
                         m.FluentMappings
-                            .Add<StockQuoteMap>()
-                            .Add<CompanyMap>()).BuildSessionFactory();
+                            .Add<Company>()
+                            .Add<StockQuote>()).BuildSessionFactory();
 
         }
     }

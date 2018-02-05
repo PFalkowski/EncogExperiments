@@ -34,6 +34,19 @@ namespace StocksData.UnitTests
         }
 
         [Fact]
+        public void RemoveSpecificStock()
+        {
+            var mbank = MockStockQuoteProvider.Mbank;
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
+
+            using (var unitOfWork = new StockEfUnitOfWork(new StockEfContextModelUpdate(connectionStr)))
+            {
+                unitOfWork.Stocks.Repository.Remove(mbank);
+                unitOfWork.Complete();
+            }
+        }
+
+        [Fact]
         public void ReadAllFilesFromDirAndSaveToDbAsCompanyStockQuotes()
         {
 

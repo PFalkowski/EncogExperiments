@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,13 +13,14 @@ namespace StocksData.Repositories
     {
         public DbContext Context { get; }
 
-        public IDbSet<TEntity> EntitiesDbSet => Context.Set<TEntity>();
+        public DbSet<TEntity> EntitiesDbSet { get; }
 
         public IEnumerable<TEntity> Entities => EntitiesDbSet;
 
         public EfRepository(DbContext context)
         {
             this.Context = context;
+            EntitiesDbSet = Context.Set<TEntity>();
         }
 
         public TEntity Get(object id)
@@ -50,18 +52,24 @@ namespace StocksData.Repositories
         public void AddRange(IEnumerable<TEntity> entities)
         {
             if (entities == null) throw new ArgumentNullException(nameof(entities));
-            ((DbSet<TEntity>)EntitiesDbSet).AddRange(entities);
+            EntitiesDbSet.AddRange(entities);
         }
 
         public void Remove(TEntity entity)
         {
+            //or: var attached = Context.ChangeTracker.Entries<TEntity>().Any(e => e.Entity.Equals(entity));
+            var attached = EntitiesDbSet.Local.Any(e => e.Equals(entity));
+            if (!attached)
+            {
+                EntitiesDbSet.Attach(entity);
+            }
             EntitiesDbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             var list = entities.ToList();
-            ((DbSet<TEntity>)EntitiesDbSet).RemoveRange(list);
+            EntitiesDbSet.RemoveRange(list);
         }
 
         public void AddOrUpdate(TEntity entity)
