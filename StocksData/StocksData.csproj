@@ -88,10 +88,22 @@
     <Compile Include="Contexts\INhContext.cs" />
     <Compile Include="Contexts\StockEfContextModelUpdate.cs" />
     <Compile Include="Contexts\StockCsvContext.cs" />
+    <Compile Include="Contexts\StockEfMigrationContext.cs" />
     <Compile Include="Contexts\StockNhContext.cs" />
     <Compile Include="Contexts\StockNhContextModelUpdate.cs" />
     <Compile Include="Mappings\CompanyMap.cs" />
+    <Compile Include="Mappings\Constants.cs" />
     <Compile Include="Mappings\StockQuoteMap.cs" />
+    <Compile Include="Migrations\201802101405485_Initial.cs" />
+    <Compile Include="Migrations\201802101405485_Initial.Designer.cs">
+      <DependentUpon>201802101405485_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\CsvRepo.cs" />
     <Compile Include="Repositories\EfRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
@@ -112,12 +124,24 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
       <Project>{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}</Project>
       <Name>StocksData.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802101405485_Initial.resx">
+      <DependentUpon>201802101405485_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Migrations\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

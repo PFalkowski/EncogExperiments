@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using StocksData.Mappings;
 using StocksData.UnitsOfWork;
 using StocksData.UnitTests.Mocks;
 using Xunit;
@@ -33,19 +34,12 @@ namespace StocksData.UnitTests
         [Fact]
         public void RemoveSpecificStock()
         {
-            const string tickerName = "Ticker";
-            const string dateName = "Date";
-            const string openName = "Open";
-            const string highName = "High";
-            const string lowName = "Low";
-            const string closeName = "Close";
-            const string volName = "Volume";
 
             var quotesTableName = "StockQuotes";
 
             var mbank = MockStockQuoteProvider.Mbank;
 
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketRemoveSpecificStock;Integrated Security=True;";
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
 
 
@@ -60,39 +54,44 @@ namespace StocksData.UnitTests
                     DestinationTableName = quotesTableName,
                     ColumnMappings =
                     {
-                        new SqlBulkCopyColumnMapping("<TICKER>", tickerName),
-                        new SqlBulkCopyColumnMapping("<DTYYYYMMDD>", dateName),
-                        new SqlBulkCopyColumnMapping("<OPEN>", openName),
-                        new SqlBulkCopyColumnMapping("<HIGH>", highName),
-                        new SqlBulkCopyColumnMapping("<LOW>", lowName),
-                        new SqlBulkCopyColumnMapping("<CLOSE>", closeName),
-                        new SqlBulkCopyColumnMapping("<VOL>", volName)
+                        new SqlBulkCopyColumnMapping(Constants.TickerName, Constants.TickerName),
+                        new SqlBulkCopyColumnMapping(Constants.DateName, Constants.DateName),
+                        new SqlBulkCopyColumnMapping(Constants.OpenName, Constants.OpenName),
+                        new SqlBulkCopyColumnMapping(Constants.HighName, Constants.HighName),
+                        new SqlBulkCopyColumnMapping(Constants.LowName, Constants.LowName),
+                        new SqlBulkCopyColumnMapping(Constants.CloseName, Constants.CloseName),
+                        new SqlBulkCopyColumnMapping(Constants.VolName, Constants.VolName)
                     }
                 };
                 inMemoryTable = new DataTable(quotesTableName)
                 {
-                    Columns =
-                    {
-                        new DataColumn(tickerName, typeof(string)),
-                        new DataColumn(dateName, typeof(int)),
-                        new DataColumn(openName, typeof(double)),
-                        new DataColumn(highName, typeof(double)),
-                        new DataColumn(lowName, typeof(double)),
-                        new DataColumn(closeName, typeof(double)),
-                        new DataColumn(volName, typeof(double))
+                    Columns = {
+                        new DataColumn(Constants.TickerName, typeof(string)),
+                        new DataColumn(Constants.DateName, typeof(int)),
+                        new DataColumn(Constants.OpenName, typeof(double)),
+                        new DataColumn(Constants.HighName, typeof(double)),
+                        new DataColumn(Constants.LowName, typeof(double)),
+                        new DataColumn(Constants.CloseName, typeof(double)),
+                        new DataColumn(Constants.VolName, typeof(double))
                     }
                 };
+                inMemoryTable.PrimaryKey = new[]
+                {
+                    inMemoryTable.Columns[0],
+                    inMemoryTable.Columns[1]
+                };
+
                 foreach (var quote in MockStockQuoteProvider.Mbank.Quotes)
                 {
                     var newQuoteRow = inMemoryTable.NewRow();
 
-                    newQuoteRow[tickerName] = quote.Ticker;
-                    newQuoteRow[dateName] = quote.Date;
-                    newQuoteRow[openName] = quote.Open;
-                    newQuoteRow[highName] = quote.High;
-                    newQuoteRow[lowName] = quote.Low;
-                    newQuoteRow[closeName] = quote.Close;
-                    newQuoteRow[volName] = quote.Volume;
+                    newQuoteRow[Constants.TickerName] = quote.Ticker;
+                    newQuoteRow[Constants.DateName] = quote.Date;
+                    newQuoteRow[Constants.OpenName] = quote.Open;
+                    newQuoteRow[Constants.HighName] = quote.High;
+                    newQuoteRow[Constants.LowName] = quote.Low;
+                    newQuoteRow[Constants.CloseName] = quote.Close;
+                    newQuoteRow[Constants.VolName] = quote.Volume;
 
                     inMemoryTable.Rows.Add(newQuoteRow);
                 }
