@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {

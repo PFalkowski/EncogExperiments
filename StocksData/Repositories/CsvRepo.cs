@@ -6,12 +6,12 @@ namespace StocksData.Repositories
 {
     public class CsvRepo<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        public StockCsvContextEager<TEntity> Context { get; set; }
+        public StockCsvContext<TEntity> Context { get; set; }
         public List<TEntity> EntitiesList { get; set; }
 
         public IEnumerable<TEntity> Entities => EntitiesList;
 
-        public CsvRepo(StockCsvContextEager<TEntity> context)
+        public CsvRepo(StockCsvContext<TEntity> context)
         {
             Context = context;
             EntitiesList = context.Entities;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentNHibernate.Mapping;
-using NHibernate.Linq;
+﻿using FluentNHibernate.Mapping;
 using StocksData.Model;
 
 namespace StocksData.Mappings
@@ -14,11 +8,12 @@ namespace StocksData.Mappings
     {
         public CompanyMap()
         {
-            Id(x => x.Ticker).Column("Ticker");
-            HasMany<StockQuote>(x => x.Quotes)
-                .Cascade.All()
-                .Table(nameof(Company));
-            //Schema("dbo");
+            Id(x => x.Ticker);
+            //Map(x => x.Ticker);
+            HasMany(x => x.Quotes)
+            .KeyColumn("Ticker")
+            //.Inverse()
+            .Cascade.All();
         }
     }
 }

@@ -41,8 +41,7 @@ namespace StocksData.Model
 
         public virtual bool Equals(object obj)
         {
-            var cast = obj as StockQuote;
-            if (cast == null) return false;
+            if (!(obj is StockQuote cast)) return false;
             return this.ValueEquals(cast);
         }
 

@@ -71,14 +71,14 @@
   <ItemGroup>
     <Compile Include="CsvRepoTest.cs" />
     <Compile Include="Mocks\MockStockQuoteProvider.cs" />
-    <Compile Include="Mocks\StockQuoteTestContext.cs" />
+    <Compile Include="Mocks\StockEfTestContext.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="NHRepositoryTest.cs" />
-    <Compile Include="EFRepositoryTest.cs" />
+    <Compile Include="NhRepositoryTest.cs" />
+    <Compile Include="EfRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

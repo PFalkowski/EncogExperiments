@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StocksData.Model
+﻿namespace StocksData.Model
 {
     public class Ping
     {

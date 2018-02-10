@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Extensions.Serialization;
-using StocksData.Adapters;
 using StocksData.Contexts;
-using StocksData.Mappings;
 using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
@@ -20,25 +13,10 @@ namespace StocksData.UnitTests
         [Fact]
         public void ReadAllFilesFromDirAndSaveToCsvRepo()
         {
+            var allStocks  = new IOStocksProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
 
-            var allFiles = new IOService().ReadDirectory(@"C:\Users\John\Downloads\mstcgl", "*.mst");
-            var allStocks = new List<Company>(allFiles.Count);
-
-            Parallel.ForEach(allFiles,
-                delegate (KeyValuePair<string, string> file)
-                {
-                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
-                    //if (deserializedQuotes.Count < 200) return;
-                    if (file.Key != deserializedQuotes.First().Ticker) throw new Exception($"{file.Key} != {deserializedQuotes.First().Ticker}");
-
-                    allStocks.Add(new Company
-                    {
-                        Ticker = deserializedQuotes.First().Ticker,
-                        Quotes = deserializedQuotes
-                    });
-                });
-            var outputFile = new FileInfo("test23443.txt");
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<Company>(outputFile)))
+            var outputFile = new FileInfo(Path.ChangeExtension(nameof(ReadAllFilesFromDirAndSaveToCsvRepo), "csv"));
+            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))
             {
                 foreach (var stock in allStocks)
                 {
@@ -51,25 +29,10 @@ namespace StocksData.UnitTests
         [Fact]
         public void GetSpecificRecordFromCsvRepo()
         {
+            var allStocks = new IOStocksProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
 
-            var allFiles = new IOService().ReadDirectory(@"C:\Users\John\Downloads\mstcgl", "*.mst");
-            var allStocks = new List<Company>(allFiles.Count);
-
-            Parallel.ForEach(allFiles,
-                delegate (KeyValuePair<string, string> file)
-                {
-                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
-                    if (deserializedQuotes.Count < 200) return;
-                    if (file.Key != deserializedQuotes.First().Ticker) throw new Exception($"{file.Key} != {deserializedQuotes.First().Ticker}");
-
-                    allStocks.Add(new Company
-                    {
-                        Ticker = deserializedQuotes.First().Ticker,
-                        Quotes = deserializedQuotes
-                    });
-                });
-            var outputFile = new FileInfo("test23443.txt");
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContextEager<Company>(outputFile)))
+            var outputFile = new FileInfo(Path.ChangeExtension(nameof(GetSpecificRecordFromCsvRepo), "csv"));
+            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))
             {
                 unitOfWork.Repository.AddRange(allStocks);
 

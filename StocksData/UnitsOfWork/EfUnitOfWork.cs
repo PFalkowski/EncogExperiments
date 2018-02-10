@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using StocksData.Contexts;
-using StocksData.Model;
-using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {

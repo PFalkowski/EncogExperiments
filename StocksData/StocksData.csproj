@@ -87,7 +87,7 @@
     <Compile Include="Adapters\StockQuotesToNormalizedMatrix.cs" />
     <Compile Include="Contexts\INhContext.cs" />
     <Compile Include="Contexts\StockEfContextModelUpdate.cs" />
-    <Compile Include="Contexts\StockCsvContextEager.cs" />
+    <Compile Include="Contexts\StockCsvContext.cs" />
     <Compile Include="Contexts\StockNhContext.cs" />
     <Compile Include="Contexts\StockNhContextModelUpdate.cs" />
     <Compile Include="Mappings\CompanyMap.cs" />
@@ -98,9 +98,9 @@
     <Compile Include="Repositories\NhRepository.cs" />
     <Compile Include="Repositories\StockRepository.cs" />
     <Compile Include="Services\IOService.cs" />
+    <Compile Include="Services\IOStocksProvider.cs" />
     <Compile Include="UnitsOfWork\IUnitOfWork.cs" />
     <Compile Include="Contexts\StockEfContext.cs" />
-    <Compile Include="Contexts\StockCsvContextLazy.cs" />
     <Compile Include="UnitsOfWork\StockNhUnitOfWork.cs" />
     <Compile Include="UnitsOfWork\StockCsvFileUnitOfWork.cs" />
     <Compile Include="UnitsOfWork\EfUnitOfWork.cs" />

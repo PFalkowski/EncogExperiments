@@ -1,30 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Security.AccessControl;
+using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
-using Extensions.Serialization;
 
 namespace StocksData.Contexts
 {
-    public class StockCsvContextLazy<TEntity> where TEntity : class
+    public class StockCsvContext<TEntity> where TEntity : class
     {
         public FileInfo File { get; set; }
-        public virtual IEnumerable<TEntity> Entities { get; set; }
+        public List<TEntity> Entities { get; set; }
         public CultureInfo Culture { get; set; }
 
-
-        public StockCsvContextLazy(FileInfo file)
+        public StockCsvContext(FileInfo file)
         {
-            File = file; 
-            //if (!file.Exists) 
-            //if (!file.Exists) throw new FileNotFoundException(nameof(file));
-
-            using (var csv = new CsvReader(file.OpenText(), true))
+            File = file;
+            if (file.Exists)
             {
-                Entities = csv.GetRecords<TEntity>();
+                using (var csv = new CsvReader(file.OpenText(), false))
+                {
+                    Entities = csv.GetRecords<TEntity>().ToList();
+                }
+            }
+            else
+            {
+                file.Create();
+                Entities = new List<TEntity>();
             }
         }
 
@@ -33,7 +35,7 @@ namespace StocksData.Contexts
             using (var writer = new CsvWriter(File.CreateText(), false))
             {
                 writer.Configuration.SanitizeForInjection = true;
-                writer.Configuration.CultureInfo = Culture;
+                writer.Configuration.CultureInfo = Culture ?? CultureInfo.CurrentCulture;
                 writer.WriteRecords(Entities);
                 writer.Flush();
             }
@@ -44,14 +46,10 @@ namespace StocksData.Contexts
             using (var writer = new CsvWriter(File.CreateText(), false))
             {
                 writer.Configuration.SanitizeForInjection = true;
-                writer.Configuration.CultureInfo = Culture;
+                writer.Configuration.CultureInfo = Culture ?? CultureInfo.CurrentCulture;
                 writer.WriteRecords(Entities);
                 return writer.FlushAsync();
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

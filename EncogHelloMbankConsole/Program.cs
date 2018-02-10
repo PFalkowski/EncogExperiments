@@ -1,26 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Encog.Engine.Network.Activation;
-using Encog.ML.Data.Basic;
-using Encog.ML.Data.Market;
-using Encog.Neural.Networks;
-using Encog.Neural.Networks.Layers;
-using Encog.Neural.Networks.Training.Propagation.Resilient;
-using Extensions.Serialization;
-using Extensions.Standard;
-using LoggerLite;
-using StocksData.Adapters;
-using StocksData.Contexts;
-using StocksData.Model;
-using StocksData.Services;
-using StocksData.UnitsOfWork;
-
-namespace EncogHelloMbankConsole
+﻿namespace EncogHelloMbankConsole
 {
     class Program
     {

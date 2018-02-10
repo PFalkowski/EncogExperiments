@@ -4,9 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CsvHelper;
 using Extensions.Serialization;
-using StocksData.Adapters;
 using StocksData.Contexts;
 using StocksData.Mappings;
 using StocksData.Model;
@@ -17,18 +15,31 @@ using Xunit;
 
 namespace StocksData.UnitTests
 {
-    public class NHRepositoryTest
+    public class NhRepositoryTest
     {
         [Fact]
-        public void RepositoryCanBeCreatedWithDbContext()
+        public void AddStock()
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var mbank = MockStockQuoteProvider.Mbank;
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketAddStock;Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
                 unitOfWork.Stocks.Repository.Add(mbank);
+                unitOfWork.Complete();
+            }
+        }
+
+        [Fact]
+        public void RemoveSpecificStock()
+        {
+            var mbank = MockStockQuoteProvider.Mbank;
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketRemoveSpecificStock;Integrated Security=True;";
+
+            using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
+            {
+                unitOfWork.Stocks.Repository.Remove(mbank);
                 unitOfWork.Complete();
             }
         }

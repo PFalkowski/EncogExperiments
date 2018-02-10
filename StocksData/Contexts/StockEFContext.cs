@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using StocksData.Model;
 
 namespace StocksData.Contexts
