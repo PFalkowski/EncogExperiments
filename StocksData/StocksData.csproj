@@ -71,6 +71,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -110,6 +111,9 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\NhRepository.cs" />
     <Compile Include="Repositories\StockRepository.cs" />
+    <Compile Include="Services\CompanyBulkInserter.cs" />
+    <Compile Include="Services\StockQuotesBulkInserter.cs" />
+    <Compile Include="Services\IBulkInserter.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\IOStocksProvider.cs" />
     <Compile Include="UnitsOfWork\IUnitOfWork.cs" />

@@ -141,9 +141,6 @@ namespace StocksData.UnitTests
         [Fact]
         public void RemoveSpecificStock()
         {
-
-            var quotesTableName = "StockQuotes";
-
             var mbank = MockStockQuoteProvider.Mbank;
 
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";

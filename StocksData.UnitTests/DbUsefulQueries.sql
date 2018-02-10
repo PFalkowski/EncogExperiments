@@ -10,3 +10,5 @@ DBCC SHRINKFILE ('StockMarketDb_log', 1)
 
 alter database StockMarketDb set offline with rollback immediate
 drop database StockMarketDb 
+
+Select Top(1) Ticker from [Companies]

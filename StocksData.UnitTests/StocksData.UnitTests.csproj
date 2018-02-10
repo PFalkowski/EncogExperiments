@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkInserterTest.cs" />
     <Compile Include="CsvRepoTest.cs" />
     <Compile Include="Mocks\MockStockQuoteProvider.cs" />
     <Compile Include="Mocks\StockEfTestContext.cs" />
