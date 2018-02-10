@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using StocksData.Mappings;
+using StocksData.Model;
 using StocksData.UnitsOfWork;
 using StocksData.UnitTests.Mocks;
 using Xunit;
+using System.Data.Entity.Design.PluralizationServices;
+using System.Globalization;
 
 namespace StocksData.UnitTests
 {
@@ -31,17 +35,22 @@ namespace StocksData.UnitTests
             }
         }
 
-        [Fact]
-        public void RemoveSpecificStock()
+        public void AddCompany(string Ticker, string connectionStr)
         {
+            using (var connection = new SqlConnection(connectionStr))
+            using (var command = new SqlCommand("insert into [Companies] (Ticker) values (@value)", connection))
+            {
+                command.Parameters.Add("@value", SqlDbType.VarChar);
+                command.Parameters["@value"].Value = Ticker;
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
-            var quotesTableName = "StockQuotes";
-
-            var mbank = MockStockQuoteProvider.Mbank;
-
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
-
-
+        public void BulkInsert(IEnumerable<StockQuote> quotes, string connectionStr)
+        {
+            var langSvc = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en"));
+            var tableName = langSvc.Pluralize(nameof(StockQuote));
 
             var sqlConnection = default(SqlConnection);
             var sqlBulkCopy = default(SqlBulkCopy);
@@ -51,7 +60,7 @@ namespace StocksData.UnitTests
                 sqlConnection = new SqlConnection(connectionStr);
                 sqlBulkCopy = new SqlBulkCopy(sqlConnection)
                 {
-                    DestinationTableName = quotesTableName,
+                    DestinationTableName = tableName,
                     ColumnMappings =
                     {
                         new SqlBulkCopyColumnMapping(Constants.TickerName, Constants.TickerName),
@@ -63,7 +72,7 @@ namespace StocksData.UnitTests
                         new SqlBulkCopyColumnMapping(Constants.VolName, Constants.VolName)
                     }
                 };
-                inMemoryTable = new DataTable(quotesTableName)
+                inMemoryTable = new DataTable(tableName)
                 {
                     Columns = {
                         new DataColumn(Constants.TickerName, typeof(string)),
@@ -81,7 +90,7 @@ namespace StocksData.UnitTests
                     inMemoryTable.Columns[1]
                 };
 
-                foreach (var quote in MockStockQuoteProvider.Mbank.Quotes)
+                foreach (var quote in quotes)
                 {
                     var newQuoteRow = inMemoryTable.NewRow();
 
@@ -109,10 +118,42 @@ namespace StocksData.UnitTests
                 inMemoryTable?.Dispose();
                 ((IDisposable)sqlBulkCopy)?.Dispose();
             }
+        }
 
+        public void BulkInsert(IEnumerable<Company> companies, string connectionStr)
+        {
+            foreach (var company in companies)
+            {
+                AddCompany(company.Ticker, connectionStr);
+                BulkInsert(company.Quotes, connectionStr);
+            }
+        }
+
+        public void BulkInsert(string connectionStr, params Company[] companies)
+        {
+            foreach (var company in companies)
+            {
+                AddCompany(company.Ticker, connectionStr);
+                BulkInsert(company.Quotes, connectionStr);
+            }
+        }
+
+        [Fact]
+        public void RemoveSpecificStock()
+        {
+
+            var quotesTableName = "StockQuotes";
+
+            var mbank = MockStockQuoteProvider.Mbank;
+
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
             using (var unitOfWork = new StockEfUnitOfWork(new StockEfTestContext(connectionStr)))
             {
+                BulkInsert(connectionStr, mbank);
+
+                Assert.Equal(1, unitOfWork.Stocks.Repository.Count());
+
                 unitOfWork.Stocks.Repository.Remove(mbank);
                 unitOfWork.Complete();
             }

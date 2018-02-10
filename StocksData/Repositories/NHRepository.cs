@@ -12,6 +12,8 @@ namespace StocksData.Repositories
 
         public ISession Session { get; }
 
+        public int Count() => Entities.Count();
+
         public NhRepository(ISession session)
         {
             Session = session;

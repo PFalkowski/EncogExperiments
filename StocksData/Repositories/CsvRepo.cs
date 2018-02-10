@@ -10,6 +10,7 @@ namespace StocksData.Repositories
         public List<TEntity> EntitiesList { get; set; }
 
         public IEnumerable<TEntity> Entities => EntitiesList;
+        public int Count() => EntitiesList.Count;
 
         public CsvRepo(StockCsvContext<TEntity> context)
         {
@@ -82,5 +83,6 @@ namespace StocksData.Repositories
         {
             Add(entity);
         }
+
     }
 }

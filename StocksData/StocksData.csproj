@@ -104,6 +104,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\AdoRepository.cs" />
     <Compile Include="Repositories\CsvRepo.cs" />
     <Compile Include="Repositories\EfRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
@@ -141,6 +142,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Migrations\Initial.sql" />
     <Content Include="Migrations\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

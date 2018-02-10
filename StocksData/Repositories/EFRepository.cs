@@ -15,6 +15,8 @@ namespace StocksData.Repositories
 
         public IEnumerable<TEntity> Entities => EntitiesDbSet;
 
+        public int Count() => EntitiesDbSet.Count();
+
         public EfRepository(DbContext context)
         {
             this.Context = context;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using StocksData.Model;
 
 namespace StocksData.Repositories
@@ -10,7 +11,10 @@ namespace StocksData.Repositories
         {
             Repository = repository;
         }
+
         public IEnumerable<Company> Entities => Repository.Entities;
+
+        public int Count() => Entities.Count();
 
         public void Add(Company entity) => Repository.Add(entity);
 
@@ -23,5 +27,6 @@ namespace StocksData.Repositories
         public void Remove(Company entity) => Repository.Remove(entity);
 
         public void RemoveRange(IEnumerable<Company> entities) => Repository.RemoveRange(entities);
+
     }
 }

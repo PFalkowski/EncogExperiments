@@ -7,7 +7,7 @@ namespace StocksData.UnitTests.Mocks
     {
         public StockEfTestContext(string connectionStr) : base(connectionStr)
         {
-            Database.SetInitializer<StockEfTestContext>(new DropCreateDatabaseAlways<StockEfTestContext>());
+            Database.SetInitializer<StockEfTestContext>(new CreateDatabaseIfNotExists<StockEfTestContext>());
         }
     }
 }
