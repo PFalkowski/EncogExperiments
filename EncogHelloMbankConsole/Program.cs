@@ -26,8 +26,8 @@ namespace EncogHelloMbankConsole
     {
         static void Main(string[] args)
         {
-            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;MultipleActiveResultSets=True;";
-            //const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=true";
+            //const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;MultipleActiveResultSets=True;";
+            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=True";
             const string inputDirectory = @"C:\Users\John\Downloads\mstcgl";
             const int ommitStocksSmallerThan = 200;
             const int ommitDeadStocksDate = 20180209;
@@ -162,8 +162,9 @@ namespace EncogHelloMbankConsole
 
             var normalizer = new StockQuotesToNormalizedMatrix();
 
-            var allStocksNormalized = new ConcurrentBag<BasicMLDataSet>();
+            var allStocksNormalized = new List<BasicMLDataSet>();
             var matrixConverter = new MatrixToMLData();
+
             var ommitedDueToLength = 0;
             var ommitedDueToInvalidity = 0;
             foreach (var stock in stocksDeserialized)
@@ -176,13 +177,7 @@ namespace EncogHelloMbankConsole
                 {
                     allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
                 }
-
             }
-            //Parallel.ForEach(stocksDeserialized, (stock) =>
-            //{
-            //    if (stock.Quotes.Count >= ommitStocksSmallerThan)
-            //        allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
-            //});
 
             logger.LogInfo(
                 $@"Loaded, converted and normalized {allStocksNormalized.Count} ({allStocksNormalized.Sum(s => s.Count)} samples) in {watch.ElapsedMilliseconds.AsTime()}. Ommited {
