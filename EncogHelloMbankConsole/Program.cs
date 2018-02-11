@@ -28,7 +28,7 @@ namespace EncogHelloMbankConsole
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
             const string inputDirectory = @"C:\Users\John\Downloads\mstcgl";
             const int ommitStocksSmallerThan = 200;
-            bool TryLoadingFromDb = true;
+            bool recreateDb = false;
 
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
@@ -41,25 +41,21 @@ namespace EncogHelloMbankConsole
 
             var stocksDeserialized = default(List<Company>);
 
-            if (context.DbExists())
+            if (context.DbExists() && !recreateDb)
             {
-                if (TryLoadingFromDb)
-                {
-                    stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
-                    logger.LogInfo($@"Fetched {stocksDeserialized} companies from Db in {timer.ElapsedMilliseconds.AsTime()}");
-                    timer.Restart();
-                }
-                else
+                stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
+                logger.LogInfo($@"Fetched {stocksDeserialized.Count} companies from Db in {timer.ElapsedMilliseconds.AsTime()}");
+                timer.Restart();
+            }
+            else
+            {
+                if (context.DbExists())
                 {
                     context.DropDb();
 
                     logger.LogInfo($@"Dropped Db in {timer.ElapsedMilliseconds.AsTime()}");
                     timer.Restart();
                 }
-            }
-
-            if (!context.DbExists())
-            {
                 context.CreateDbIfNotExists();
 
                 logger.LogInfo($@"Created Db in {timer.ElapsedMilliseconds.AsTime()}");
@@ -82,11 +78,6 @@ namespace EncogHelloMbankConsole
                 logger.LogInfo($@"Saved {stocksDeserialized.Count} to {connectionStr} in {timer.ElapsedMilliseconds.AsTime()}");
                 timer.Restart();
             }
-
-
-
-            //logger.LogInfo($@"Initiated db connection in {timer.ElapsedMilliseconds.AsTime()}");
-            //timer.Restart();
 
 
             var normalizer = new StockQuotesToNormalizedMatrix();
