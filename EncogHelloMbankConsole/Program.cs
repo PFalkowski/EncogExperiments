@@ -18,6 +18,7 @@ using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
 using System.Data.SqlClient;
+using System.Collections.Concurrent;
 
 namespace EncogHelloMbankConsole
 {
@@ -94,8 +95,8 @@ namespace EncogHelloMbankConsole
                 errorDelta = errorsList.Count > 1
                     ? (int?)(errorsList[train.IterationNumber - 1] - errorsList[train.IterationNumber - 2])
                     : (int?)null;
-                errorDeltaThresholdReached = (!errorDelta.HasValue || errorDelta.Value > errorDeltaThreshold);
-                errorThresholdAchieved = train.Error > errorThreshold;
+                errorDeltaThresholdReached = (!errorDelta.HasValue || errorDelta.Value < errorDeltaThreshold);
+                errorThresholdAchieved = train.Error < errorThreshold;
                 logger.LogInfo(
                     $@"iteration {train.IterationNumber} completed in {watch.ElapsedMilliseconds.AsTime()}; error = {
                             train.Error
@@ -123,7 +124,7 @@ namespace EncogHelloMbankConsole
             {
                 stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
                 logger.LogInfo(
-                    $@"Fetched {stocksDeserialized.Count} companies from Db in {watch.ElapsedMilliseconds.AsTime()}");
+                    $@"Found {stocksDeserialized.Count} companies in Db in {watch.ElapsedMilliseconds.AsTime()}");
                 watch.Restart();
             }
             else
@@ -161,18 +162,34 @@ namespace EncogHelloMbankConsole
 
             var normalizer = new StockQuotesToNormalizedMatrix();
 
-            var allStocksNormalized = new List<BasicMLDataSet>();
+            var allStocksNormalized = new ConcurrentBag<BasicMLDataSet>();
             var matrixConverter = new MatrixToMLData();
-            Parallel.ForEach(stocksDeserialized, (stock) =>
+            var ommitedDueToLength = 0;
+            var ommitedDueToInvalidity = 0;
+            foreach (var stock in stocksDeserialized)
             {
-                if (stock.Quotes.Count >= ommitStocksSmallerThan)
+                if (stock.Quotes.Count < ommitStocksSmallerThan)
+                { ++ommitedDueToLength; }
+                else if (stock.Quotes.Max(s => s.Date) < ommitDeadStocksDate)
+                { ++ommitedDueToInvalidity; }
+                else
+                {
                     allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
-            });
+                }
+
+            }
+            //Parallel.ForEach(stocksDeserialized, (stock) =>
+            //{
+            //    if (stock.Quotes.Count >= ommitStocksSmallerThan)
+            //        allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
+            //});
 
             logger.LogInfo(
-                $@"Converted and normalized {allStocksNormalized.Count} in {watch.ElapsedMilliseconds.AsTime()}. Ommited {
+                $@"Loaded, converted and normalized {allStocksNormalized.Count} ({allStocksNormalized.Sum(s => s.Count)} samples) in {watch.ElapsedMilliseconds.AsTime()}. Ommited {
                         stocksDeserialized.Count - allStocksNormalized.Count
-                    }. Reson: less than {ommitStocksSmallerThan} samples.");
+                    }.{(ommitedDueToLength > 0 || ommitedDueToInvalidity > 0 ? " Reason:" : string.Empty)}{
+                        (ommitedDueToLength > 0 ? $" {ommitedDueToLength} too small" : string.Empty)}{(ommitedDueToLength > 0 && ommitedDueToInvalidity > 0 ? "," : string.Empty)}{
+                        (ommitedDueToInvalidity > 0 ? $" {ommitedDueToInvalidity} invalid" : string.Empty)}");
             watch.Restart();
 
             var oneDataSet = new BasicMLDataSet();

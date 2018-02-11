@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using StocksData.Model;
 
 namespace StocksData.Repositories
@@ -27,6 +28,8 @@ namespace StocksData.Repositories
         public void Remove(Company entity) => Repository.Remove(entity);
 
         public void RemoveRange(IEnumerable<Company> entities) => Repository.RemoveRange(entities);
+
+        public int QuotesCount() => Entities.Sum(x => x.Quotes.Count);
 
         public void Dispose()
         {
