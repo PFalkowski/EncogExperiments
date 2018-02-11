@@ -27,48 +27,67 @@ namespace EncogHelloMbankConsole
         {
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
             const string inputDirectory = @"C:\Users\John\Downloads\mstcgl";
-            const int ommitStocksLessThanDays = 200;
+            const int ommitStocksSmallerThan = 200;
+            bool TryLoadingFromDb = true;
 
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
-            var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray}, new FileLoggerBase("console"));
+            var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray }, new FileLoggerBase("console"));
             var timer = Stopwatch.StartNew();
-            
-            var directoryService = new IOService();
-            var stocksRaw = directoryService.ReadDirectory(inputDirectory);
 
-            logger.LogInfo($@"Read {stocksRaw.Count} in {timer.ElapsedMilliseconds.AsTime()} from {inputDirectory}");
-            timer.Restart();
-
-            var stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
-
-            logger.LogInfo($@"Deserialized {stocksDeserialized.Count} in {timer.ElapsedMilliseconds.AsTime()}");
-            timer.Restart();
 
             var context = new StockEfContext(connectionStr);
+            var unitOfWork = new StockEfUnitOfWork(context);
+
+            var stocksDeserialized = default(List<Company>);
+
             if (context.DbExists())
             {
-                context.DropDb();
+                if (TryLoadingFromDb)
+                {
+                    stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
+                    logger.LogInfo($@"Fetched {stocksDeserialized} companies from Db in {timer.ElapsedMilliseconds.AsTime()}");
+                    timer.Restart();
+                }
+                else
+                {
+                    context.DropDb();
 
-                logger.LogInfo($@"Dropped Db in {timer.ElapsedMilliseconds.AsTime()}");
-                timer.Restart();
+                    logger.LogInfo($@"Dropped Db in {timer.ElapsedMilliseconds.AsTime()}");
+                    timer.Restart();
+                }
             }
+
             if (!context.DbExists())
             {
                 context.CreateDbIfNotExists();
 
                 logger.LogInfo($@"Created Db in {timer.ElapsedMilliseconds.AsTime()}");
                 timer.Restart();
+
+                var directoryService = new IOService();
+                var stocksRaw = directoryService.ReadDirectory(inputDirectory);
+
+                logger.LogInfo($@"Read {stocksRaw.Count} in {timer.ElapsedMilliseconds.AsTime()} from {inputDirectory}");
+                timer.Restart();
+
+                stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
+
+                logger.LogInfo($@"Deserialized {stocksDeserialized.Count} in {timer.ElapsedMilliseconds.AsTime()}");
+                timer.Restart();
+
+                var bulkInserter = new CompanyBulkInserter(connectionStr);
+                bulkInserter.BulkInsert(stocksDeserialized);
+
+                logger.LogInfo($@"Saved {stocksDeserialized.Count} to {connectionStr} in {timer.ElapsedMilliseconds.AsTime()}");
+                timer.Restart();
             }
-            var unitOfWork = new StockEfUnitOfWork(context);
-            logger.LogInfo($@"Initiated db connection in {timer.ElapsedMilliseconds.AsTime()}");
-            timer.Restart();
 
-            var bulkInserter = new CompanyBulkInserter(connectionStr);
-            bulkInserter.BulkInsert(stocksDeserialized);
 
-            logger.LogInfo($@"Saved {stocksDeserialized.Count} to {connectionStr} in {timer.ElapsedMilliseconds.AsTime()}");
-            timer.Restart();
+
+            //logger.LogInfo($@"Initiated db connection in {timer.ElapsedMilliseconds.AsTime()}");
+            //timer.Restart();
+
 
             var normalizer = new StockQuotesToNormalizedMatrix();
 
@@ -76,11 +95,11 @@ namespace EncogHelloMbankConsole
             var matrixConverter = new MatrixToMLData();
             Parallel.ForEach(stocksDeserialized, (stock) =>
             {
-                if (stock.Quotes.Count >= ommitStocksLessThanDays)
+                if (stock.Quotes.Count >= ommitStocksSmallerThan)
                     allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
             });
 
-            logger.LogInfo($@"Converted and normalized {allStocksNormalized.Count} in {timer.ElapsedMilliseconds.AsTime()}. Ommited {stocksDeserialized.Count - allStocksNormalized.Count}. Reson: less than {ommitStocksLessThanDays} samples.");
+            logger.LogInfo($@"Converted and normalized {allStocksNormalized.Count} in {timer.ElapsedMilliseconds.AsTime()}. Ommited {stocksDeserialized.Count - allStocksNormalized.Count}. Reson: less than {ommitStocksSmallerThan} samples.");
             timer.Restart();
 
             var oneDataSet = new BasicMLDataSet();
