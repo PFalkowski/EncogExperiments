@@ -23,13 +23,13 @@ namespace StocksData.Services
 
             using (var connection = new SqlConnection(ConnectionString))
             {
+                connection.Open();
                 foreach (var company in companies)
                 {
                     using (var command = new SqlCommand("insert into [Companies] (Ticker) values (@value)", connection))
                     {
                         command.Parameters.Add("@value", SqlDbType.VarChar);
                         command.Parameters["@value"].Value = company.Ticker;
-                        connection.Open();
                         command.ExecuteNonQuery();
                     }
                     bulkInserter.BulkInsert(company.Quotes);
