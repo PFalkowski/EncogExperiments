@@ -116,6 +116,7 @@
     <Compile Include="Services\IBulkInserter.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\StocksBulkDeserializer.cs" />
+    <Compile Include="Services\StocksFileProvider.cs" />
     <Compile Include="UnitsOfWork\IUnitOfWork.cs" />
     <Compile Include="Contexts\StockEfContext.cs" />
     <Compile Include="UnitsOfWork\StockNhUnitOfWork.cs" />

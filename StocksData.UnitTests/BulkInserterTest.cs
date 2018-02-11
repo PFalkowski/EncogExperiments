@@ -20,7 +20,8 @@ namespace StocksData.UnitTests
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(BulkInsertOneStock)};Integrated Security=True;";
 
             var context = new StockEfTestContext(connectionStr);
-            context.Database.CreateIfNotExists();
+            context.DropDbIfExists();
+            context.CreateDbIfNotExists();
 
             // Act
 

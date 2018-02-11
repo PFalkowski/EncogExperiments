@@ -28,5 +28,9 @@ namespace StocksData.Repositories
 
         public void RemoveRange(IEnumerable<Company> entities) => Repository.RemoveRange(entities);
 
+        public void Dispose()
+        {
+            Repository?.Dispose();
+        }
     }
 }

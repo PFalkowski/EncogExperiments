@@ -13,7 +13,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void ReadAllFilesFromDirAndSaveToCsvRepo()
         {
-            var allStocks  = new IOStocksProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var allStocks  = new StocksFileProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
 
             var outputFile = new FileInfo(Path.ChangeExtension(nameof(ReadAllFilesFromDirAndSaveToCsvRepo), "csv"));
             using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))
@@ -29,7 +29,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void GetSpecificRecordFromCsvRepo()
         {
-            var allStocks = new IOStocksProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var allStocks = new StocksFileProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
 
             var outputFile = new FileInfo(Path.ChangeExtension(nameof(GetSpecificRecordFromCsvRepo), "csv"));
             using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))

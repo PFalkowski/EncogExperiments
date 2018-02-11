@@ -84,5 +84,8 @@ namespace StocksData.Repositories
             Add(entity);
         }
 
+        public void Dispose()
+        {
+        }
     }
 }

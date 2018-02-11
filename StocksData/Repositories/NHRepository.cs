@@ -68,5 +68,10 @@ namespace StocksData.Repositories
                 Remove(entity);
             }
         }
+
+        public void Dispose()
+        {
+            Session?.Dispose();
+        }
     }
 }

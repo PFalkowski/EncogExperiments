@@ -25,114 +25,23 @@ namespace EncogHelloMbankConsole
     {
         static void Main(string[] args)
         {
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
+            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;MultipleActiveResultSets=True;";
+            //const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=true";
             const string inputDirectory = @"C:\Users\John\Downloads\mstcgl";
             const int ommitStocksSmallerThan = 200;
+            const int ommitDeadStocksDate = 20180209;
+            const double errorThreshold = 0.02;
+            const double errorDeltaThreshold = 0.0001;
             bool recreateDb = false;
 
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray }, new FileLoggerBase("console"));
-            var timer = Stopwatch.StartNew();
-
-
-            var context = new StockEfContext(connectionStr);
-            var unitOfWork = new StockEfUnitOfWork(context);
-
-            var stocksDeserialized = default(List<Company>);
-
-            if (context.DbExists() && !recreateDb)
-            {
-                stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
-                logger.LogInfo($@"Fetched {stocksDeserialized.Count} companies from Db in {timer.ElapsedMilliseconds.AsTime()}");
-                timer.Restart();
-            }
-            else
-            {
-                if (context.DbExists())
-                {
-                    context.DropDb();
-
-                    logger.LogInfo($@"Dropped Db in {timer.ElapsedMilliseconds.AsTime()}");
-                    timer.Restart();
-                }
-                context.CreateDbIfNotExists();
-
-                logger.LogInfo($@"Created Db in {timer.ElapsedMilliseconds.AsTime()}");
-                timer.Restart();
-
-                var directoryService = new IOService();
-                var stocksRaw = directoryService.ReadDirectory(inputDirectory);
-
-                logger.LogInfo($@"Read {stocksRaw.Count} in {timer.ElapsedMilliseconds.AsTime()} from {inputDirectory}");
-                timer.Restart();
-
-                stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
-
-                logger.LogInfo($@"Deserialized {stocksDeserialized.Count} in {timer.ElapsedMilliseconds.AsTime()}");
-                timer.Restart();
-
-                var bulkInserter = new CompanyBulkInserter(connectionStr);
-                bulkInserter.BulkInsert(stocksDeserialized);
-
-                logger.LogInfo($@"Saved {stocksDeserialized.Count} to {connectionStr} in {timer.ElapsedMilliseconds.AsTime()}");
-                timer.Restart();
-            }
-
-
-            var normalizer = new StockQuotesToNormalizedMatrix();
-
-            var allStocksNormalized = new List<BasicMLDataSet>();
-            var matrixConverter = new MatrixToMLData();
-            Parallel.ForEach(stocksDeserialized, (stock) =>
-            {
-                if (stock.Quotes.Count >= ommitStocksSmallerThan)
-                    allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
-            });
-
-            logger.LogInfo($@"Converted and normalized {allStocksNormalized.Count} in {timer.ElapsedMilliseconds.AsTime()}. Ommited {stocksDeserialized.Count - allStocksNormalized.Count}. Reson: less than {ommitStocksSmallerThan} samples.");
-            timer.Restart();
-
-            var oneDataSet = new BasicMLDataSet();
-            foreach (var stockNormal in allStocksNormalized)
-            {
-                foreach (var mlDataPair in stockNormal.Data)
-                {
-                    oneDataSet.Add(mlDataPair);
-                }
-            }
-            logger.LogInfo($@"Constructed dataset with {oneDataSet.Count} samples in {timer.ElapsedMilliseconds.AsTime()}");
-
-            var network = new BasicNetwork();
-            network.AddLayer(new BasicLayer(null, true, 5));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 230));
-            //network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 310));
-            //network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 230));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 5));
-            network.AddLayer(new BasicLayer(new ActivationClippedLinear(), false, 1));
-
-
-            network.Structure.FinalizeStructure();
-            network.Reset();
-
+            var oneDataSet = GetBasicMlDataSet(connectionStr, recreateDb, logger, inputDirectory, ommitStocksSmallerThan, ommitDeadStocksDate);
+            var network = SetupNetwork();
             //var train = new Backpropagation(network, trainingSet, 0.07, 0.07);
-            var train = new ResilientPropagation(network, oneDataSet);
-
-            var learningTime = default(TimeSpan);
-            do
-            {
-                logger.LogInfo(@"Training... ");
-                train.Iteration();
-                logger.LogInfo($@"iteration {train.IterationNumber} completed in {timer.ElapsedMilliseconds.AsTime()}; error = {train.Error}");
-                learningTime += timer.Elapsed;
-                timer.Restart();
-            } while (train.Error > 0.02);
-            logger.LogInfo($@"Training finished after {learningTime.TotalMilliseconds.AsTime()}, at iteration {train.IterationNumber}; error = {train.Error}");
+            var trainAlgorithm = new ResilientPropagation(network, oneDataSet);
+            Train(logger, trainAlgorithm, errorDeltaThreshold, errorThreshold);
 
             var testSet = oneDataSet.Skip(1200).ToList().Take(200).ToList();
             var avgError = 0.0;
@@ -145,6 +54,139 @@ namespace EncogHelloMbankConsole
 
             logger.LogInfo($@"evaluation of training data resulted in avgError = {avgError}");
             Console.Read();
+        }
+
+        static BasicNetwork SetupNetwork()
+        {
+            var basicNetwork = new BasicNetwork();
+            basicNetwork.AddLayer(new BasicLayer(null, true, 5));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 230));
+            //network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 310));
+            //network.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 230));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 23));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), true, 5));
+            basicNetwork.AddLayer(new BasicLayer(new ActivationClippedLinear(), false, 1));
+
+
+            basicNetwork.Structure.FinalizeStructure();
+            basicNetwork.Reset();
+            return basicNetwork;
+        }
+
+        static void Train(ILogger logger, ResilientPropagation train, double errorDeltaThreshold,
+            double errorThreshold)
+        {
+            var watch = Stopwatch.StartNew();
+            var learningTime = default(TimeSpan);
+            int? errorDelta;
+            var errorsList = new List<double>();
+            bool errorDeltaThresholdReached;
+            bool errorThresholdAchieved;
+            do
+            {
+                logger.LogInfo(@"Training... ");
+                train.Iteration();
+                errorsList.Add(train.Error);
+                errorDelta = errorsList.Count > 1
+                    ? (int?)(errorsList[train.IterationNumber - 1] - errorsList[train.IterationNumber - 2])
+                    : (int?)null;
+                errorDeltaThresholdReached = (!errorDelta.HasValue || errorDelta.Value > errorDeltaThreshold);
+                errorThresholdAchieved = train.Error > errorThreshold;
+                logger.LogInfo(
+                    $@"iteration {train.IterationNumber} completed in {watch.ElapsedMilliseconds.AsTime()}; error = {
+                            train.Error
+                        }, error delta = {errorDelta?.ToString() ?? "?"}");
+                learningTime += watch.Elapsed;
+                watch.Restart();
+            } while (!errorThresholdAchieved || !errorDeltaThresholdReached);
+
+            logger.LogInfo(
+                $@"Training finished after {learningTime.TotalMilliseconds.AsTime()}, at iteration {
+                        train.IterationNumber
+                    }; error = {train.Error}");
+        }
+
+        static BasicMLDataSet GetBasicMlDataSet(string connectionStr, bool recreateDb, ILogger logger, string inputDirectory, int ommitStocksSmallerThan, int ommitDeadStocksDate)
+        {
+            var context = new StockEfContext(connectionStr);
+            var unitOfWork = new StockEfUnitOfWork(context);
+
+            var stocksDeserialized = default(List<Company>);
+
+            var watch = Stopwatch.StartNew();
+
+            if (context.DbExists() && !recreateDb)
+            {
+                stocksDeserialized = unitOfWork.Stocks.GetAll().ToList();
+                logger.LogInfo(
+                    $@"Fetched {stocksDeserialized.Count} companies from Db in {watch.ElapsedMilliseconds.AsTime()}");
+                watch.Restart();
+            }
+            else
+            {
+                if (context.DbExists())
+                {
+                    context.DropDbIfExists();
+
+                    logger.LogInfo($@"Dropped Db in {watch.ElapsedMilliseconds.AsTime()}");
+                    watch.Restart();
+                }
+
+                context.CreateDbIfNotExists();
+
+                logger.LogInfo($@"Created Db in {watch.ElapsedMilliseconds.AsTime()}");
+                watch.Restart();
+
+                var directoryService = new IOService();
+                var stocksRaw = directoryService.ReadDirectory(inputDirectory);
+
+                logger.LogInfo($@"Read {stocksRaw.Count} in {watch.ElapsedMilliseconds.AsTime()} from {inputDirectory}");
+                watch.Restart();
+
+                stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
+
+                logger.LogInfo($@"Deserialized {stocksDeserialized.Count} in {watch.ElapsedMilliseconds.AsTime()}");
+                watch.Restart();
+
+                var bulkInserter = new CompanyBulkInserter(connectionStr);
+                bulkInserter.BulkInsert(stocksDeserialized);
+
+                logger.LogInfo($@"Saved {stocksDeserialized.Count} to {connectionStr} in {watch.ElapsedMilliseconds.AsTime()}");
+                watch.Restart();
+            }
+
+            var normalizer = new StockQuotesToNormalizedMatrix();
+
+            var allStocksNormalized = new List<BasicMLDataSet>();
+            var matrixConverter = new MatrixToMLData();
+            Parallel.ForEach(stocksDeserialized, (stock) =>
+            {
+                if (stock.Quotes.Count >= ommitStocksSmallerThan)
+                    allStocksNormalized.Add(matrixConverter.ConvertToHighPred(normalizer.Convert(stock.Quotes.ToList())));
+            });
+
+            logger.LogInfo(
+                $@"Converted and normalized {allStocksNormalized.Count} in {watch.ElapsedMilliseconds.AsTime()}. Ommited {
+                        stocksDeserialized.Count - allStocksNormalized.Count
+                    }. Reson: less than {ommitStocksSmallerThan} samples.");
+            watch.Restart();
+
+            var oneDataSet = new BasicMLDataSet();
+            foreach (var stockNormal in allStocksNormalized)
+            {
+                foreach (var mlDataPair in stockNormal.Data)
+                {
+                    oneDataSet.Add(mlDataPair);
+                }
+            }
+
+            logger.LogInfo($@"Constructed dataset with {oneDataSet.Count} samples in {watch.ElapsedMilliseconds.AsTime()}");
+            watch.Restart();
+            return oneDataSet;
         }
     }
 }

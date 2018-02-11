@@ -51,10 +51,9 @@ namespace StocksData.UnitTests
                 Assert.Equal(1, unitOfWork.Stocks.Repository.Count());
 
                 unitOfWork.Stocks.Repository.Remove(mbank);
+                unitOfWork.Complete();
 
                 Assert.Equal(0, unitOfWork.Stocks.Repository.Count());
-
-                unitOfWork.Complete();
             }
 
             using (var connection = new SqlConnection(connectionStr))
