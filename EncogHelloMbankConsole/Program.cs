@@ -24,6 +24,11 @@ namespace EncogHelloMbankConsole
 {
     class Program
     {
+        public class TrainTestData<T>
+        {
+            public T TrainingSet { get; set; }
+            public T TestSet { get; set; }
+        }
         static void Main(string[] args)
         {
             //const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;MultipleActiveResultSets=True;";
@@ -38,15 +43,14 @@ namespace EncogHelloMbankConsole
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray }, new FileLoggerBase("console"));
-            var oneDataSet = GetBasicMlDataSet(connectionStr, recreateDb, logger, inputDirectory, ommitStocksSmallerThan, ommitDeadStocksDate);
+            var dataSets = GetBasicMlDataSet(connectionStr, recreateDb, logger, inputDirectory, ommitStocksSmallerThan, ommitDeadStocksDate, new Random(), 0.8m);
             var network = SetupNetwork();
             //var train = new Backpropagation(network, trainingSet, 0.07, 0.07);
-            var trainAlgorithm = new ResilientPropagation(network, oneDataSet);
+            var trainAlgorithm = new ResilientPropagation(network, dataSets.TrainingSet);
             Train(logger, trainAlgorithm, errorDeltaThreshold, errorThreshold);
-
-            var testSet = oneDataSet.Skip(1200).ToList().Take(200).ToList();
+            
             var avgError = 0.0;
-            foreach (var testSample in testSet)
+            foreach (var testSample in dataSets.TestSet)
             {
                 var output = network.Compute(testSample.Input);
                 var difference = testSample.Ideal[0] - output[0];
@@ -111,7 +115,7 @@ namespace EncogHelloMbankConsole
                     }; error = {train.Error}");
         }
 
-        static BasicMLDataSet GetBasicMlDataSet(string connectionStr, bool recreateDb, ILogger logger, string inputDirectory, int ommitStocksSmallerThan, int ommitDeadStocksDate)
+        static TrainTestData<BasicMLDataSet> GetBasicMlDataSet(string connectionStr, bool recreateDb, ILogger logger, string inputDirectory, int ommitStocksSmallerThan, int ommitDeadStocksDate, Random rnProvider, decimal ratioTrainingSet)
         {
             var context = new StockEfContext(connectionStr);
             var unitOfWork = new StockEfUnitOfWork(context);
@@ -187,18 +191,40 @@ namespace EncogHelloMbankConsole
                         (ommitedDueToInvalidity > 0 ? $" {ommitedDueToInvalidity} invalid" : string.Empty)}");
             watch.Restart();
 
-            var oneDataSet = new BasicMLDataSet();
-            foreach (var stockNormal in allStocksNormalized)
+
+
+            var trainDataSet = new BasicMLDataSet();
+            var testDataSet = new BasicMLDataSet();
+            var i = 0;
+
+            for (; i < allStocksNormalized.Count * ratioTrainingSet; ++i)
             {
-                foreach (var mlDataPair in stockNormal.Data)
+                foreach (var mlDataPair in allStocksNormalized[i].Data)
                 {
-                    oneDataSet.Add(mlDataPair);
+                    trainDataSet.Add(mlDataPair);
+                }
+            }
+            for (; i < allStocksNormalized.Count; ++i)
+            {
+                foreach (var mlDataPair in allStocksNormalized[i].Data)
+                {
+                    testDataSet.Add(mlDataPair);
                 }
             }
 
-            logger.LogInfo($@"Constructed dataset with {oneDataSet.Count} samples in {watch.ElapsedMilliseconds.AsTime()}");
+            logger.LogInfo($@"Constructed training and test datasets with {trainDataSet.Count} and {testDataSet.Count} samples in {watch.ElapsedMilliseconds.AsTime()}");
             watch.Restart();
-            return oneDataSet;
+
+            trainDataSet.Data.Shuffle(rnProvider);
+            logger.LogInfo($@"Finished shuffling trainDataSet ({trainDataSet.Count} samples) in {watch.ElapsedMilliseconds.AsTime()}");
+
+            watch.Restart();
+            testDataSet.Data.Shuffle(rnProvider);
+
+            logger.LogInfo($@"Finished shuffling testDataSet ({testDataSet.Count} samples) in {watch.ElapsedMilliseconds.AsTime()}");
+            watch.Restart();
+
+            return new TrainTestData<BasicMLDataSet> { TrainingSet = trainDataSet, TestSet = testDataSet };
         }
     }
 }

@@ -46,8 +46,8 @@
     <Reference Include="Extensions.Serialization, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Extensions.Serialization.3.1.0\lib\netstandard2.0\Extensions.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Extensions.Standard, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extensions.Standard.2.0.0\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
+    <Reference Include="Extensions.Standard, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extensions.Standard.2.1.0\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
