@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate.Util;
 using StocksData.Model;
 
@@ -25,6 +27,9 @@ namespace StocksData.Repositories
         
         public IList<Company> GetAll() => Repository.GetAll();
 
+        //public Company Get(Expression<Func<Company, bool>> predicate) => Entities.FirstOrDefault(predicate);
+
+        //public IEnumerable<Company> GetAll(Expression<Func<Company, bool>> predicate) => Entities.Where(predicate);
         public void Remove(Company entity) => Repository.Remove(entity);
 
         public void RemoveRange(IEnumerable<Company> entities) => Repository.RemoveRange(entities);

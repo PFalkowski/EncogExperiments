@@ -19,6 +19,7 @@ using StocksData.Services;
 using StocksData.UnitsOfWork;
 using System.Data.SqlClient;
 using System.Collections.Concurrent;
+using System.IO;
 
 namespace EncogHelloMbankConsole
 {
@@ -29,26 +30,33 @@ namespace EncogHelloMbankConsole
             public T TrainingSet { get; set; }
             public T TestSet { get; set; }
         }
+
         static void Main(string[] args)
         {
             //const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;MultipleActiveResultSets=True;";
             const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=True";
-            const string inputDirectory = @"C:\Users\John\Downloads\mstcgl";
+            const string projectName = "EncogPlayground";
+            const string inputDirName = "input";
+            const string outputDirName = "output";
+            const string logFileName = "console";
+            var inputDirectory = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), projectName, inputDirName));
+            var outputDirectory = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), projectName, outputDirName));
             const int ommitStocksSmallerThan = 200;
             const int ommitDeadStocksDate = 20180209;
             const double errorThreshold = 0.02;
             const double errorDeltaThreshold = 0.0001;
-            bool recreateDb = false;
+            var recreateDb = false;
 
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-
-            var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray }, new FileLoggerBase("console"));
+            if (!inputDirectory.Exists) { throw new DirectoryNotFoundException(inputDirectory.FullName); }
+            if (!outputDirectory.Exists) { outputDirectory.Create(); }
+            var logger = new AggregateLogger(new ConsoleLogger { InfoColor = ConsoleColor.Gray }, new FileLoggerBase(Path.Combine(outputDirectory.FullName, logFileName)));
             var dataSets = GetBasicMlDataSet(connectionStr, recreateDb, logger, inputDirectory, ommitStocksSmallerThan, ommitDeadStocksDate, new Random(), 0.8m);
             var network = SetupNetwork();
             //var train = new Backpropagation(network, trainingSet, 0.07, 0.07);
             var trainAlgorithm = new ResilientPropagation(network, dataSets.TrainingSet);
             Train(logger, trainAlgorithm, errorDeltaThreshold, errorThreshold);
-            
+
             var avgError = 0.0;
             foreach (var testSample in dataSets.TestSet)
             {
@@ -115,7 +123,7 @@ namespace EncogHelloMbankConsole
                     }; error = {train.Error}");
         }
 
-        static TrainTestData<BasicMLDataSet> GetBasicMlDataSet(string connectionStr, bool recreateDb, ILogger logger, string inputDirectory, int ommitStocksSmallerThan, int ommitDeadStocksDate, Random rnProvider, decimal ratioTrainingSet)
+        static TrainTestData<BasicMLDataSet> GetBasicMlDataSet(string connectionStr, bool recreateDb, ILogger logger, DirectoryInfo inputDirectory, int ommitStocksSmallerThan, int ommitDeadStocksDate, Random rnProvider, decimal ratioTrainingSet)
         {
             var context = new StockEfContext(connectionStr);
             var unitOfWork = new StockEfUnitOfWork(context);
@@ -149,7 +157,7 @@ namespace EncogHelloMbankConsole
                 var directoryService = new IOService();
                 var stocksRaw = directoryService.ReadDirectory(inputDirectory);
 
-                logger.LogInfo($@"Read {stocksRaw.Count} in {watch.ElapsedMilliseconds.AsTime()} from {inputDirectory}");
+                logger.LogInfo($@"Read {stocksRaw.Count} in {watch.ElapsedMilliseconds.AsTime()} from {inputDirectory.Name}");
                 watch.Restart();
 
                 stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
