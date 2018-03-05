@@ -11,10 +11,11 @@ namespace StocksData.Services
     {
         public IOService IoLayer { get; set; }
         public StocksBulkDeserializer DeserializationService { get; set; }
+
         public List<Company> ReadStocksFrom(string directory, string pattern = "*.*")
         {
             var directorySvc = IoLayer ?? new IOService();
-            var deserializationSvc = DeserializationService ?? new StocksBulkDeserializer();
+            var deserializationSvc = DeserializationService ?? throw new NullReferenceException(nameof(DeserializationService));
             var stocksRaw = directorySvc.ReadDirectory(directory, pattern);
 
             return deserializationSvc.Deserialize(stocksRaw);

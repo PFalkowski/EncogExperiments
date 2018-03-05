@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Extensions.Standard;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 
 namespace StocksData.Model
 {
-    public class StockQuote
+    public class StockQuote : IValidatable
     {
         [Key]
         [Column(Order = 1)]
@@ -19,6 +22,9 @@ namespace StocksData.Model
         public virtual double Low { get; set; }
         public virtual double Close { get; set; }
         public virtual double Volume { get; set; }
+
+        [NotMapped]
+        public virtual DateTime DateParsed => DateTime.ParseExact(Date.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
 
         public virtual bool ValueEquals(StockQuote other)
         {

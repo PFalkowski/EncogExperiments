@@ -35,6 +35,7 @@ namespace StocksData.UnitTests
                 Assert.Equal(1, result);
             }
         }
+
         [Fact]
         public void RemoveSpecificStock()
         {

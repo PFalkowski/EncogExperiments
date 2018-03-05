@@ -13,6 +13,14 @@ namespace StocksData.Services
 {
     public class StocksBulkDeserializer
     {
+        public IStocksDeserializer Deserializer { get; }
+
+        public StocksBulkDeserializer(IStocksDeserializer deserializer)
+        {
+            Deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+        }
+
+
         public List<Company> Deserialize(Dictionary<string, string> files)
         {
             var allStocks = new List<Company>(files.Count);
@@ -20,15 +28,7 @@ namespace StocksData.Services
             Parallel.ForEach(files,
                 delegate (KeyValuePair<string, string> file)
                 {
-                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
-                    var companyName = Path.GetFileNameWithoutExtension(file.Key);
-                    if (companyName != deserializedQuotes.First().Ticker) throw new Exception($"{companyName} != {deserializedQuotes.First().Ticker}");
-
-                    allStocks.Add(new Company
-                    {
-                        Ticker = companyName,
-                        Quotes = deserializedQuotes
-                    });
+                    allStocks.Add(Deserializer.Deserialize(file.Value));
                 });
 
             return allStocks;

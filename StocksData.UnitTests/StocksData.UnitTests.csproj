@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="BulkInserterTest.cs" />
     <Compile Include="CsvRepoTest.cs" />
+    <Compile Include="IntToDateConverterTest.cs" />
     <Compile Include="Mocks\MockStockQuoteProvider.cs" />
     <Compile Include="Mocks\StockEfTestContext.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -88,6 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Mocks\11BIT.mst" />
+    <None Include="Mocks\CDPROJEKT.mst" />
     <None Include="Mocks\MBANK.mst" />
     <None Include="packages.config" />
   </ItemGroup>

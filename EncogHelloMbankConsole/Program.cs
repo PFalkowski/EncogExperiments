@@ -160,7 +160,7 @@ namespace EncogHelloMbankConsole
                 logger.LogInfo($@"Read {stocksRaw.Count} in {watch.ElapsedMilliseconds.AsTime()} from {inputDirectory.Name}");
                 watch.Restart();
 
-                stocksDeserialized = new StocksBulkDeserializer().Deserialize(stocksRaw);
+                stocksDeserialized = new StocksBulkDeserializer(new StocksDeserializer(new StockQuoteCsvClassMap())).Deserialize(stocksRaw);
 
                 logger.LogInfo($@"Deserialized {stocksDeserialized.Count} in {watch.ElapsedMilliseconds.AsTime()}");
                 watch.Restart();

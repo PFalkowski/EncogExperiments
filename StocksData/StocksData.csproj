@@ -92,6 +92,8 @@
     <Compile Include="Contexts\StockEfMigrationContext.cs" />
     <Compile Include="Contexts\StockNhContext.cs" />
     <Compile Include="Contexts\StockNhContextModelUpdate.cs" />
+    <Compile Include="Converters\IIntToDateConverter.cs" />
+    <Compile Include="Converters\IntToDateConverter.cs" />
     <Compile Include="Mappings\CompanyMap.cs" />
     <Compile Include="Mappings\Constants.cs" />
     <Compile Include="Mappings\StockQuoteMap.cs" />
@@ -112,10 +114,12 @@
     <Compile Include="Repositories\NhRepository.cs" />
     <Compile Include="Repositories\StockRepository.cs" />
     <Compile Include="Services\CompanyBulkInserter.cs" />
+    <Compile Include="Services\IStocksDeserializer.cs" />
     <Compile Include="Services\StockQuotesBulkInserter.cs" />
     <Compile Include="Services\IBulkInserter.cs" />
     <Compile Include="Services\IOService.cs" />
     <Compile Include="Services\StocksBulkDeserializer.cs" />
+    <Compile Include="Services\StocksDeserializer.cs" />
     <Compile Include="Services\StocksFileProvider.cs" />
     <Compile Include="UnitsOfWork\IUnitOfWork.cs" />
     <Compile Include="Contexts\StockEfContext.cs" />

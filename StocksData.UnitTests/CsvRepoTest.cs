@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using StocksData.Contexts;
+using StocksData.Mappings;
 using StocksData.Model;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
@@ -11,12 +14,16 @@ namespace StocksData.UnitTests
     public class CsvRepoTest
     {
         [Fact]
-        public void ReadAllFilesFromDirAndSaveToCsvRepo()
+        public void SavingToCsvRepoWorks()
         {
-            var allStocks  = new StocksFileProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var deserializer = new StocksDeserializer(new StockQuoteCsvClassMap());
+            var allStocks = new List<Company> {
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources._11BIT)),
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources.CDPROJEKT)),
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources.MBANK)) };
 
-            var outputFile = new FileInfo(Path.ChangeExtension(nameof(ReadAllFilesFromDirAndSaveToCsvRepo), "csv"));
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))
+            var outputFile = new FileInfo(Path.ChangeExtension(nameof(SavingToCsvRepoWorks), "csv"));
+            using (var unitOfWork = new StockCsvUnitOfWork(new StockCsvContext<Company>(outputFile)))
             {
                 foreach (var stock in allStocks)
                 {
@@ -29,10 +36,14 @@ namespace StocksData.UnitTests
         [Fact]
         public void GetSpecificRecordFromCsvRepo()
         {
-            var allStocks = new StocksFileProvider().ReadStocksFrom(@"C:\Users\John\Downloads\mstcgl", "*.mst");
+            var deserializer = new StocksDeserializer(new StockQuoteCsvClassMap());
+            var allStocks = new List<Company> {
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources._11BIT)),
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources.CDPROJEKT)),
+                deserializer.Deserialize(Encoding.UTF8.GetString(Properties.Resources.MBANK)) };
 
             var outputFile = new FileInfo(Path.ChangeExtension(nameof(GetSpecificRecordFromCsvRepo), "csv"));
-            using (var unitOfWork = new StockCsvFUnitOfWork(new StockCsvContext<Company>(outputFile)))
+            using (var unitOfWork = new StockCsvUnitOfWork(new StockCsvContext<Company>(outputFile)))
             {
                 unitOfWork.Repository.AddRange(allStocks);
 

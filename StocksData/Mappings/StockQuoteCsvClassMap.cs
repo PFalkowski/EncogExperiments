@@ -14,6 +14,7 @@ namespace StocksData.Mappings
             Map(m => m.Low).Name("<LOW>");
             Map(m => m.Close).Name("<CLOSE>");
             Map(m => m.Volume).Name("<VOL>");
+            Map(m => m.DateParsed).Ignore();
         }
     }
 }

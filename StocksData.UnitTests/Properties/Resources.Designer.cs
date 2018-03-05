@@ -63,6 +63,26 @@ namespace StocksData.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] _11BIT {
+            get {
+                object obj = ResourceManager.GetObject("_11BIT", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CDPROJEKT {
+            get {
+                object obj = ResourceManager.GetObject("CDPROJEKT", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] MBANK {
             get {
                 object obj = ResourceManager.GetObject("MBANK", resourceCulture);

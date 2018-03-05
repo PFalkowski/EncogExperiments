@@ -5,12 +5,12 @@ using StocksData.Repositories;
 
 namespace StocksData.UnitsOfWork
 {
-    public sealed class StockCsvFUnitOfWork : IUnitOfWork
+    public sealed class StockCsvUnitOfWork : IUnitOfWork
     {
         private readonly StockCsvContext<Company> _context;
         public CsvRepo<Company> Repository { get; set; }
 
-        public StockCsvFUnitOfWork(StockCsvContext<Company> context)
+        public StockCsvUnitOfWork(StockCsvContext<Company> context)
         {
             _context = context;
             Repository = new CsvRepo<Company>(context);
