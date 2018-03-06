@@ -8,6 +8,9 @@ namespace StocksData.Mappings
 {
     public static class Constants
     {
+        public const string StockQuotesName = "StockQuotes";
+        public const string CompaniesName = "Companies";
+
         public const string TickerName = "Ticker";
         public const string DateName = "Date";
         public const string OpenName = "Open";

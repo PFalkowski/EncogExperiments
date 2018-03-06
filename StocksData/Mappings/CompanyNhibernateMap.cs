@@ -8,14 +8,10 @@ namespace StocksData.Mappings
     {
         public CompanyNhibernateMap()
         {
-            Table("Companies");
+            Table(Constants.CompaniesName);
             Id(x => x.Ticker);
-            //Map(x => x.Ticker);
-            HasMany(x => x.Quotes)//.Table("StockQuote")
-            .KeyColumn("Ticker")
-            //.ForeignKeyConstraintName("CompanyQuotesConstrint")
-            //.Not.Inverse()
-            //.Inverse()
+            HasMany(x => x.Quotes)
+            .KeyColumn(Constants.TickerName)
             .Cascade.All();
         }
     }
