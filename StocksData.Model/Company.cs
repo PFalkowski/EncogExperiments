@@ -18,7 +18,7 @@ namespace StocksData.Model
         [NotMapped]
         public virtual StockQuote LastQuote => Quotes?.Last();
 
-        public bool IsValid()
+        public virtual bool IsValid()
         {
             return (!string.IsNullOrWhiteSpace(Ticker)) && Quotes == null ? false : Quotes.All(q => q.IsValid());
         }

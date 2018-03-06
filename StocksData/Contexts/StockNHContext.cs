@@ -1,6 +1,8 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using NHibernate.Tool.hbm2ddl;
+using StocksData.Mappings;
 using StocksData.Model;
 
 namespace StocksData.Contexts
@@ -15,8 +17,11 @@ namespace StocksData.Contexts
                         .ConnectionString(connectionString).ShowSql())
                     .Mappings(m =>
                         m.FluentMappings
-                            .Add<Company>()
-                            .Add<StockQuote>()).BuildSessionFactory();
+                            .Add<CompanyNhibernateMap>()
+                            .Add<StockQuoteNhibernateMap>()
+                            )
+                            .ExposeConfiguration(c => SchemaMetadataUpdater.QuoteTableAndColumns(c))
+                            .BuildSessionFactory();
 
         }
     }

@@ -92,11 +92,9 @@
     <Compile Include="Contexts\StockEfMigrationContext.cs" />
     <Compile Include="Contexts\StockNhContext.cs" />
     <Compile Include="Contexts\StockNhContextModelUpdate.cs" />
-    <Compile Include="Converters\IIntToDateConverter.cs" />
-    <Compile Include="Converters\IntToDateConverter.cs" />
-    <Compile Include="Mappings\CompanyMap.cs" />
+    <Compile Include="Mappings\CompanyNhibernateMap.cs" />
     <Compile Include="Mappings\Constants.cs" />
-    <Compile Include="Mappings\StockQuoteMap.cs" />
+    <Compile Include="Mappings\StockQuoteNhibernateMap.cs" />
     <Compile Include="Migrations\201802101405485_Initial.cs" />
     <Compile Include="Migrations\201802101405485_Initial.Designer.cs">
       <DependentUpon>201802101405485_Initial.cs</DependentUpon>

@@ -4,10 +4,11 @@ using StocksData.Model;
 namespace StocksData.Mappings
 {
 
-    public class StockQuoteMap : ClassMap<StockQuote>
+    public class StockQuoteNhibernateMap : ClassMap<StockQuote>
     {
-        public StockQuoteMap()
+        public StockQuoteNhibernateMap()
         {
+            Table("StockQuotes");
             //Schema("dbo");
             CompositeId()
                 .KeyProperty(x => x.Ticker)

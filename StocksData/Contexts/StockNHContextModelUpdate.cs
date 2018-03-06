@@ -12,18 +12,15 @@ namespace StocksData.Contexts
         public StockNhContextModelUpdate(string connectionString)
         {
             SessionFactory = Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2012
-                    .ConnectionString(connectionString)
-                    //.ShowSql
-                )
-                .Mappings(m =>
-                    m.FluentMappings
-                            .AddFromAssemblyOf<StockQuoteMap>()
-                        //.Add<StockQuoteMap>()
-                        //.Add<CompanyMap>()
-                    )
-                .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
-                    .BuildSessionFactory();
+                    .Database(MsSqlConfiguration.MsSql2012
+                        .ConnectionString(connectionString).ShowSql())
+                    .Mappings(m =>
+                        m.FluentMappings
+                            .Add<CompanyNhibernateMap>()
+                            .Add<StockQuoteNhibernateMap>()
+                            )
+                            .ExposeConfiguration(c => SchemaMetadataUpdater.QuoteTableAndColumns(c))
+                            .BuildSessionFactory();
 
         }
     }

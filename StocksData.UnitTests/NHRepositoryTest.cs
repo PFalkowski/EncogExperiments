@@ -22,7 +22,7 @@ namespace StocksData.UnitTests
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var mbank = MockStockQuoteProvider.Mbank;
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketAddStock;Integrated Security=True;";
+            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
