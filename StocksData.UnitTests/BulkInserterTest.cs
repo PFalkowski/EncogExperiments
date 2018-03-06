@@ -16,7 +16,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void BulkInsertOneStock()
         {
-            var mbank = MockStockQuoteProvider.Mbank;
+            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(BulkInsertOneStock)};Integrated Security=True;";
 
             var context = new StockEfTestContext(connectionStr);

@@ -18,7 +18,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void AddStock()
         {
-            var mbank = MockStockQuoteProvider.Mbank;
+            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(AddStock)};Integrated Security=True;";
 
             using (var unitOfWork = new StockEfUnitOfWork(new StockEfTestContext(connectionStr)))
@@ -39,7 +39,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void RemoveSpecificStock()
         {
-            var mbank = MockStockQuoteProvider.Mbank;
+            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
 
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(RemoveSpecificStock)};Integrated Security=True;";
 

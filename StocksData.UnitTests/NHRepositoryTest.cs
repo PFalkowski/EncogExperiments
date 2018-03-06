@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,8 +23,9 @@ namespace StocksData.UnitTests
         public void AddStock()
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            var mbank = MockStockQuoteProvider.Mbank;
+            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
+
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
@@ -34,7 +37,7 @@ namespace StocksData.UnitTests
         [Fact]
         public void RemoveSpecificStock()
         {
-            var mbank = MockStockQuoteProvider.Mbank;
+            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketRemoveSpecificStock;Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
