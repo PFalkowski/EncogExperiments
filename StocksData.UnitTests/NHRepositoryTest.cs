@@ -55,6 +55,7 @@ DROP DATABASE {dbName}";
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
                 unitOfWork.Stocks.Repository.Add(mbank);
+                //var sessionStats = unitOfWork.Session.
                 unitOfWork.Complete();
             }
         }

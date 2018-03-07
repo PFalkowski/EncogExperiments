@@ -15,7 +15,7 @@ namespace StocksData.Mappings
                 .KeyProperty(x => x.Date);
 
 
-            Map(x => x.Ticker).Not.Nullable().Column(Constants.TickerName).Index("IX_Ticker");
+            //Map(x => x.Ticker).Not.Nullable().Column(Constants.TickerName).Index("IX_Ticker");
 
             Map(x => x.Open).Not.Nullable().Column(Constants.OpenName);
             Map(x => x.High).Not.Nullable().Column(Constants.HighName);

@@ -21,6 +21,7 @@ namespace StocksData.Repositories
         public void Add(T entity)
         {
             Session.Save(entity);
+            Session.Flush();
         }
 
         public void AddOrUpdate(T entity)

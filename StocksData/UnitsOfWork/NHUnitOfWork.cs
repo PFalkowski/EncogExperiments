@@ -6,25 +6,26 @@ namespace StocksData.UnitsOfWork
 {
     public abstract class NhUnitOfWork : IUnitOfWork
     {
-        private ISession Session { get; }
+        public ISession Session { get; }
 
         public NhUnitOfWork(INhContext context)
         {
             Session = context.SessionFactory.
                 OpenSession();
-            Session.BeginTransaction();
+            Session.FlushMode = FlushMode.Commit;
+            //Session.BeginTransaction();
         }
 
         public virtual void Complete()
         {
+            //Session.Transaction.Commit();
             Session.Flush();
-            Session.Transaction.Commit();
         }
 
         public virtual async Task CompleteAsync()
         {
-            await Session.FlushAsync();
             await Session.Transaction.CommitAsync();
+            await Session.FlushAsync();
         }
 
         public virtual void Dispose()
