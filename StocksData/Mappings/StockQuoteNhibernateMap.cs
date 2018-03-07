@@ -9,14 +9,16 @@ namespace StocksData.Mappings
         public StockQuoteNhibernateMap()
         {
             Table(Constants.StockQuotesName);
+
             CompositeId()
                 .KeyProperty(x => x.Ticker)
                 .KeyProperty(x => x.Date);
-            Map(x => x.Open).Column(Constants.OpenName);
-            Map(x => x.High).Column(Constants.HighName);
-            Map(x => x.Low).Column(Constants.LowName);
-            Map(x => x.Close).Column(Constants.CloseName);
-            Map(x => x.Volume).Column(Constants.VolName);
+
+            Map(x => x.Open).Not.Nullable().Column(Constants.OpenName);
+            Map(x => x.High).Not.Nullable().Column(Constants.HighName);
+            Map(x => x.Low).Not.Nullable().Column(Constants.LowName);
+            Map(x => x.Close).Not.Nullable().Column(Constants.CloseName);
+            Map(x => x.Volume).Not.Nullable().Column(Constants.VolName);
         }
     }
 }
