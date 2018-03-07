@@ -1,6 +1,7 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using NHibernate.Dialect;
 using NHibernate.Tool.hbm2ddl;
 using StocksData.Mappings;
 
@@ -19,7 +20,8 @@ namespace StocksData.Contexts
                             .Add<CompanyNhibernateMap>()
                             .Add<StockQuoteNhibernateMap>()
                             )
-                            .ExposeConfiguration(c => SchemaMetadataUpdater.QuoteTableAndColumns(c))
+                            .ExposeConfiguration(c => SchemaMetadataUpdater.QuoteTableAndColumns(c, new MsSql2012Dialect()))
+                            .ExposeConfiguration(cfg => new SchemaExport(cfg).Execute(true, true, false))
                             .BuildSessionFactory();
 
         }

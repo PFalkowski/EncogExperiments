@@ -16,3 +16,6 @@ alter database StockMarketDb set offline with rollback immediate
 drop database StockMarketDb 
 
 Select Top(1) Ticker from [Companies]
+
+use master
+if db_id('AddingStockToNhibernateWorks') is not null select 1 else select 0

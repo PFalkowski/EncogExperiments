@@ -20,13 +20,38 @@ namespace StocksData.UnitTests
     public class NhRepositoryTest
     {
         [Fact]
-        public void AddStock()
+        public void AddingStockToNhibernateWorks()
         {
+            var dbName = nameof(AddingStockToNhibernateWorks);
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;";
 
 
+            var masterConnectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;";
+
+            var QuerryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
+            var CreateDatabaseCommand = $@"CREATE DATABASE {dbName}";
+            var DropDatabaseCommand = $@"DECLARE @kill varchar(8000); SET @kill = '';  
+SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'  
+FROM master..sysprocesses  
+WHERE dbid = db_id('{dbName}')
+
+EXEC(@kill);
+DROP DATABASE {dbName}";
+
+            using (var connection = new SqlConnection(masterConnectionStr))
+            using (var dbExistsCmd = new SqlCommand(QuerryDbExistsCommand, connection))
+            using (var createDbCmd = new SqlCommand(CreateDatabaseCommand, connection))
+            using (var dropDbCmd = new SqlCommand(DropDatabaseCommand, connection))
+            {
+                connection.Open();
+                var dbExists = (int)dbExistsCmd.ExecuteScalar();
+                if (dbExists == 1) { dropDbCmd.ExecuteNonQuery(); }
+                createDbCmd.ExecuteNonQuery();
+            }
+
+
+            string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
                 unitOfWork.Stocks.Repository.Add(mbank);
@@ -35,10 +60,10 @@ namespace StocksData.UnitTests
         }
 
         [Fact]
-        public void RemoveSpecificStock()
+        public void RemovingSpecificStockFromNhibernateWorks()
         {
             var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
-            const string connectionStr = @"server=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketRemoveSpecificStock;Integrated Security=True;";
+            string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={nameof(RemovingSpecificStockFromNhibernateWorks)};Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
