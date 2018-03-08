@@ -23,32 +23,9 @@ namespace StocksData.UnitTests
         public void AddingStockToNhibernateWorks()
         {
             var dbName = nameof(AddingStockToNhibernateWorks);
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
-
-
-            var masterConnectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;";
-
-            var QuerryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
-            var CreateDatabaseCommand = $@"CREATE DATABASE {dbName}";
-            var DropDatabaseCommand = $@"DECLARE @kill varchar(8000); SET @kill = '';  
-SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'  
-FROM master..sysprocesses  
-WHERE dbid = db_id('{dbName}')
-
-EXEC(@kill);
-DROP DATABASE {dbName}";
-
-            using (var connection = new SqlConnection(masterConnectionStr))
-            using (var dbExistsCmd = new SqlCommand(QuerryDbExistsCommand, connection))
-            using (var createDbCmd = new SqlCommand(CreateDatabaseCommand, connection))
-            using (var dropDbCmd = new SqlCommand(DropDatabaseCommand, connection))
-            {
-                connection.Open();
-                var dbExists = (int)dbExistsCmd.ExecuteScalar();
-                if (dbExists == 1) { dropDbCmd.ExecuteNonQuery(); }
-                createDbCmd.ExecuteNonQuery();
-            }
+            UnitTestHelper.RecreateLocalDatabase(dbName);
+            //CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            var mbank = MockStockQuoteProvider.Mocks.Value["11BIT"];
 
 
             string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";

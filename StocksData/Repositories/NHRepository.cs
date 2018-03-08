@@ -27,6 +27,7 @@ namespace StocksData.Repositories
         public void AddOrUpdate(T entity)
         {
             Session.SaveOrUpdate(entity);
+            Session.Flush();
         }
 
         public void AddRange(IEnumerable<T> entities)
@@ -34,6 +35,7 @@ namespace StocksData.Repositories
             foreach (var entity in entities)
             {
                 Session.Save(entity);
+                Session.Flush();
             }
         }
 
@@ -60,6 +62,7 @@ namespace StocksData.Repositories
         public void Remove(T entity)
         {
             Session.Delete(entity);
+            Session.Flush();
         }
 
         public void RemoveRange(IEnumerable<T> entities)
@@ -67,6 +70,7 @@ namespace StocksData.Repositories
             foreach (var entity in entities)
             {
                 Remove(entity);
+                Session.Flush();
             }
         }
 
