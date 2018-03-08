@@ -24,29 +24,41 @@ namespace StocksData.UnitTests
         {
             var dbName = nameof(AddingStockToNhibernateWorks);
             UnitTestHelper.RecreateLocalDatabase(dbName);
-            //CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            var mbank = MockStockQuoteProvider.Mocks.Value["11BIT"];
-
-
+            var company = MockStockQuoteProvider.Mocks.Value["11BIT"];
             string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";
+
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
-                unitOfWork.Stocks.Repository.Add(mbank);
-                //var sessionStats = unitOfWork.Session.
+                unitOfWork.Stocks.Repository.Add(company);
                 unitOfWork.Complete();
+
+                var all = unitOfWork.Stocks.Repository.GetAll();
+                Assert.Equal(1, all.Count);
+                Assert.Equal(1814, all.First().Quotes.Count);
             }
         }
 
         [Fact]
         public void RemovingSpecificStockFromNhibernateWorks()
         {
-            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
-            string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={nameof(RemovingSpecificStockFromNhibernateWorks)};Integrated Security=True;";
+            var dbName = nameof(AddingStockToNhibernateWorks);
+            UnitTestHelper.RecreateLocalDatabase(dbName);
+            var company = MockStockQuoteProvider.Mocks.Value["11BIT"];
+            string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
             {
-                unitOfWork.Stocks.Repository.Remove(mbank);
+                unitOfWork.Stocks.Repository.Add(company);
                 unitOfWork.Complete();
+
+                var all = unitOfWork.Stocks.Repository.GetAll();
+                Assert.Equal(1, all.Count);
+                Assert.Equal(1814, all.First().Quotes.Count);
+
+                unitOfWork.Stocks.Repository.Remove(company);
+                unitOfWork.Complete();
+
+                Assert.Equal(0, all.Count);
             }
         }
 
