@@ -51,49 +51,19 @@ namespace StocksData.UnitTests
                 unitOfWork.Stocks.Repository.Add(company);
                 unitOfWork.Complete();
 
-                var all = unitOfWork.Stocks.Repository.GetAll();
-                Assert.Equal(1, all.Count);
-                Assert.Equal(1814, all.First().Quotes.Count);
+                var before = unitOfWork.Stocks.Repository.GetAll();
+                Assert.Equal(1, before.Count);
+                Assert.Equal(1814, before.First().Quotes.Count);
 
                 unitOfWork.Stocks.Repository.Remove(company);
                 unitOfWork.Complete();
 
-                Assert.Equal(0, all.Count);
+                var after = unitOfWork.Stocks.Repository.GetAll();
+
+                Assert.Equal(0, after.Count);
             }
         }
-
-        [Fact]
-        public void ReadAllFilesFromDirAndSaveToDbAsCompanyStockQuotes()
-        {
-
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-
-            var allFiles = new IOService().ReadDirectory("C:\\Users\\John\\Downloads\\mstcgl", "*.mst");
-            var allStocks = new List<Company>(allFiles.Count);
-
-            Parallel.ForEach(allFiles,
-                delegate (KeyValuePair<string, string> file)
-                {
-                    var deserializedQuotes = file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap(), CultureInfo.InvariantCulture).ToList();
-                    if (!string.Equals(Path.GetFileNameWithoutExtension(file.Key), deserializedQuotes.First().Ticker, StringComparison.InvariantCulture)) throw new Exception($"{Path.GetFileNameWithoutExtension(file.Key)} != {deserializedQuotes.First().Ticker}");
-
-                    allStocks.Add(new Company { Ticker = deserializedQuotes.First().Ticker, Quotes = deserializedQuotes });
-                });
-            const string connectionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StockMarketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-            using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
-            {
-                //unitOfWork.StockRepository.AddRange(allStocks);
-                foreach (var stock in allStocks)
-                {
-                    unitOfWork.Stocks.Repository.AddOrUpdate(stock);
-                    unitOfWork.Complete();
-                }
-                unitOfWork.Complete();
-            }
-            //Parallel.ForEach(allFiles, (file) => allStocks.Add(file.Value.DeserializeFromCsv(new StockQuoteCsvClassMap()).ToList()));
-
-        }
+        
         //[Fact]
         //public void GetSpecificStock()
         //{

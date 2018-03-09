@@ -12,6 +12,7 @@ namespace StocksData.Mappings
             Id(x => x.Ticker);
             HasMany(x => x.Quotes)
             .KeyColumn(Constants.TickerName)
+            .Inverse()
             .Cascade.All();
         }
     }
