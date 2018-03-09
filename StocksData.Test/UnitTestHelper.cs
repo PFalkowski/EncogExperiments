@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StocksData.UnitTests
+namespace StocksData.Test
 {
     public static class UnitTestHelper
     {

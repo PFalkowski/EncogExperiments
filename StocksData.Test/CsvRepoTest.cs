@@ -9,7 +9,7 @@ using StocksData.Services;
 using StocksData.UnitsOfWork;
 using Xunit;
 
-namespace StocksData.UnitTests
+namespace StocksData.Test
 {
     public class CsvRepoTest
     {

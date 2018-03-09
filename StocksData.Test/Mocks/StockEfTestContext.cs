@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using StocksData.Contexts;
 
-namespace StocksData.UnitTests.Mocks
+namespace StocksData.Test.Mocks
 {
     public class StockEfTestContext : StockEfContext
     {

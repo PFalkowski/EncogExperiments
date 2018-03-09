@@ -7,7 +7,7 @@ using Extensions.Serialization;
 using StocksData.Mappings;
 using StocksData.Model;
 
-namespace StocksData.UnitTests.Mocks
+namespace StocksData.Test.Mocks
 {
     public static class MockStockQuoteProvider
     {

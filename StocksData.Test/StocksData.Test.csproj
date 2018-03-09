@@ -9,8 +9,9 @@
     <ProjectGuid>{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StocksData.UnitTests</RootNamespace>
-    <AssemblyName>StocksData.UnitTests</AssemblyName>
+    <RootNamespace>StocksData.Test</RootNamespace>
+    <AssemblyName>StocksData.Test</AssemblyName>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

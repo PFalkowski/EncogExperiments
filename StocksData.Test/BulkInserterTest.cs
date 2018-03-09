@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using StocksData.Services;
 using StocksData.UnitsOfWork;
-using StocksData.UnitTests.Mocks;
+using StocksData.Test.Mocks;
 using Xunit;
 
-namespace StocksData.UnitTests
+namespace StocksData.Test
 {
     public class BulkInserterTest
     {

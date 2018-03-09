@@ -5,13 +5,13 @@ using System.Data.SqlClient;
 using StocksData.Mappings;
 using StocksData.Model;
 using StocksData.UnitsOfWork;
-using StocksData.UnitTests.Mocks;
+using StocksData.Test.Mocks;
 using Xunit;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using StocksData.Services;
 
-namespace StocksData.UnitTests
+namespace StocksData.Test
 {
     public class EfRepositoryTest
     {
