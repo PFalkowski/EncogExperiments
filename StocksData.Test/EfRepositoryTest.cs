@@ -15,15 +15,15 @@ namespace StocksData.Test
 {
     public class EfRepositoryTest
     {
-        [Fact]
-        public void AddStock()
+        [Theory]
+        [ClassData(typeof(MbankMock))]
+        public void AddStock(Company company)
         {
-            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(AddStock)};Integrated Security=True;";
 
             using (var unitOfWork = new StockEfUnitOfWork(new StockEfTestContext(connectionStr)))
             {
-                unitOfWork.Stocks.Repository.Add(mbank);
+                unitOfWork.Stocks.Repository.Add(company);
                 unitOfWork.Complete();
             }
 
@@ -36,10 +36,10 @@ namespace StocksData.Test
             }
         }
 
-        [Fact]
-        public void RemoveSpecificStock()
+        [Theory]
+        [ClassData(typeof(MbankMock))]
+        public void RemoveSpecificStock(Company company)
         {
-            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
 
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(RemoveSpecificStock)};Integrated Security=True;";
 
@@ -47,11 +47,11 @@ namespace StocksData.Test
             {
                 Assert.Equal(0, unitOfWork.Stocks.Repository.Count());
 
-                new CompanyBulkInserter(connectionStr).BulkInsert(mbank);
+                new CompanyBulkInserter(connectionStr).BulkInsert(company);
 
                 Assert.Equal(1, unitOfWork.Stocks.Repository.Count());
 
-                unitOfWork.Stocks.Repository.Remove(mbank);
+                unitOfWork.Stocks.Repository.Remove(company);
                 unitOfWork.Complete();
 
                 Assert.Equal(0, unitOfWork.Stocks.Repository.Count());

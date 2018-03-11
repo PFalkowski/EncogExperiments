@@ -8,15 +8,16 @@ using StocksData.Services;
 using StocksData.UnitsOfWork;
 using StocksData.Test.Mocks;
 using Xunit;
+using StocksData.Model;
 
 namespace StocksData.Test
 {
     public class BulkInserterTest
     {
-        [Fact]
-        public void BulkInsertOneStock()
+        [Theory]
+        [ClassData(typeof(MbankMock))]
+        public void BulkInsertOneStock(Company company)
         {
-            var mbank = MockStockQuoteProvider.Mocks.Value["MBANK"];
             string connectionStr = $"server=(localdb)\\MSSQLLocalDB;Initial Catalog={nameof(BulkInsertOneStock)};Integrated Security=True;";
 
             var context = new StockEfTestContext(connectionStr);
@@ -26,7 +27,7 @@ namespace StocksData.Test
             // Act
 
             var tested = new CompanyBulkInserter(connectionStr);
-            tested.BulkInsert(mbank);
+            tested.BulkInsert(company);
 
             //Assert
 
@@ -35,7 +36,7 @@ namespace StocksData.Test
             {
                 connection.Open();
                 var result = (string)command.ExecuteScalar();
-                Assert.Equal(mbank.Ticker, result);
+                Assert.Equal(company.Ticker, result);
             }
         }
     }

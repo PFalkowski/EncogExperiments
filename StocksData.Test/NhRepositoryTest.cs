@@ -19,12 +19,13 @@ namespace StocksData.Test
 {
     public class NhRepositoryTest
     {
-        [Fact]
-        public void AddingStockToNhibernateWorks()
+        [Theory]
+        [ClassData(typeof(MbankMock))]
+        public void AddingStockToNhibernateWorks(Company company)
         {
+            var expected = company.Quotes.Count;
             var dbName = nameof(AddingStockToNhibernateWorks);
             UnitTestHelper.RecreateLocalDatabase(dbName);
-            var company = MockStockQuoteProvider.Mocks.Value["11BIT"];
             string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
@@ -34,16 +35,17 @@ namespace StocksData.Test
 
                 var all = unitOfWork.Stocks.Repository.GetAll();
                 Assert.Equal(1, all.Count);
-                Assert.Equal(1814, all.First().Quotes.Count);
+                Assert.Equal(expected, all.First().Quotes.Count);
             }
         }
 
-        [Fact]
-        public void RemovingSpecificStockFromNhibernateWorks()
+        [Theory]
+        [ClassData(typeof(MbankMock))]
+        public void RemovingSpecificStockFromNhibernateWorks(Company company)
         {
+            var expected = company.Quotes.Count;
             var dbName = nameof(AddingStockToNhibernateWorks);
             UnitTestHelper.RecreateLocalDatabase(dbName);
-            var company = MockStockQuoteProvider.Mocks.Value["11BIT"];
             string connectionStr = $@"server=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;";
 
             using (var unitOfWork = new StockNhUnitOfWork(new StockNhContextModelUpdate(connectionStr)))
@@ -53,7 +55,7 @@ namespace StocksData.Test
 
                 var before = unitOfWork.Stocks.Repository.GetAll();
                 Assert.Equal(1, before.Count);
-                Assert.Equal(1814, before.First().Quotes.Count);
+                Assert.Equal(expected, before.First().Quotes.Count);
 
                 unitOfWork.Stocks.Repository.Remove(company);
                 unitOfWork.Complete();
