@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using StocksData.Mappings;
+﻿using System.Data.SqlClient;
+using Services;
 using StocksData.Model;
 using StocksData.UnitsOfWork;
 using StocksData.Test.Mocks;
 using Xunit;
-using System.Data.Entity.Design.PluralizationServices;
-using System.Globalization;
-using StocksData.Services;
 
 namespace StocksData.Test
 {

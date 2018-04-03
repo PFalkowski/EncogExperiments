@@ -2,11 +2,9 @@
 using StocksData.Mappings;
 using StocksData.Model;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace StocksData.Test.Mocks

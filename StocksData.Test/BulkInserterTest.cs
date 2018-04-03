@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StocksData.Services;
-using StocksData.UnitsOfWork;
+﻿using System.Data.SqlClient;
+using Services;
 using StocksData.Test.Mocks;
 using Xunit;
 using StocksData.Model;

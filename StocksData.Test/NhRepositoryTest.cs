@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Extensions.Serialization;
+﻿using System.Linq;
 using StocksData.Contexts;
-using StocksData.Mappings;
 using StocksData.Model;
-using StocksData.Services;
 using StocksData.UnitsOfWork;
 using StocksData.Test.Mocks;
 using Xunit;

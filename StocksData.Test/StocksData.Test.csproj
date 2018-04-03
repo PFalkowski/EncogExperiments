@@ -98,6 +98,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EncogStocks\Services\Services.csproj">
+      <Project>{9260C900-1CD6-4E9D-AD43-795786356C4D}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
       <Project>{dd62dde9-77cd-4900-bd2b-9f9abc197993}</Project>
       <Name>StocksData.Model</Name>

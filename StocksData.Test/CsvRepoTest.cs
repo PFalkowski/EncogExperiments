@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Services;
 using StocksData.Contexts;
 using StocksData.Mappings;
 using StocksData.Model;
-using StocksData.Services;
 using StocksData.UnitsOfWork;
 using Xunit;
 
