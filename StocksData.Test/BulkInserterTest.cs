@@ -1,8 +1,8 @@
 ﻿using System.Data.SqlClient;
-using Services;
 using StocksData.Test.Mocks;
 using Xunit;
 using StocksData.Model;
+using Services;
 
 namespace StocksData.Test
 {

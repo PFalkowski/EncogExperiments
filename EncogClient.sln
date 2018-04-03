@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksData.Model", "StocksD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksData.Test", "StocksData.Test\StocksData.Test.csproj", "{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "..\EncogStocks\Services\Services.csproj", "{9260C900-1CD6-4E9D-AD43-795786356C4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{9260C900-1CD6-4E9D-AD43-795786356C4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

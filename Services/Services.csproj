@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5358011E-FBF5-41D5-8A7A-762383E8E738}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>EncogHelloMbankConsole</RootNamespace>
-    <AssemblyName>EncogHelloMbankConsole</AssemblyName>
+    <ProjectGuid>{9260C900-1CD6-4E9D-AD43-795786356C4D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Services</RootNamespace>
+    <AssemblyName>Services</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,27 +33,18 @@
     <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.6.1.1\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="encog-core-cs, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e882172b12155d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\encog-dotnet-core.3.4.0\lib\encog-core-cs.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Extensions.Serialization, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extensions.Serialization.3.1.0\lib\netstandard2.0\Extensions.Serialization.dll</HintPath>
+    <Reference Include="Extensions.Serialization, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extensions.Serialization.3.2.0\lib\netstandard2.0\Extensions.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Extensions.Standard, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Extensions.Standard.2.1.0\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
     </Reference>
-    <Reference Include="LoggerLite, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LoggerLite.2.0.0\lib\netstandard2.0\LoggerLite.dll</HintPath>
+    <Reference Include="LoggerLite, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LoggerLite.2.3.0\lib\netstandard2.0\LoggerLite.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,26 +53,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CompanyBulkInserter.cs" />
+    <Compile Include="IBulkInserter.cs" />
+    <Compile Include="IOService.cs" />
+    <Compile Include="IStocksDeserializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StockQuotesBulkInserter.cs" />
+    <Compile Include="StocksBulkDeserializer.cs" />
+    <Compile Include="StocksDeserializer.cs" />
+    <Compile Include="StocksFileProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{9260C900-1CD6-4E9D-AD43-795786356C4D}</Project>
-      <Name>Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
-      <Project>{dd62dde9-77cd-4900-bd2b-9f9abc197993}</Project>
+    <ProjectReference Include="..\..\..\..\OneDrive\Repos\EncogClient\StocksData.Model\StocksData.Model.csproj">
+      <Project>{29145E6F-E63D-4222-AACB-39DCFE84F13C}</Project>
       <Name>StocksData.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StocksData\StocksData.csproj">
-      <Project>{585fcfea-a593-405f-8198-0a64bba5efcc}</Project>
+    <ProjectReference Include="..\..\..\..\OneDrive\Repos\EncogClient\StocksData\StocksData.csproj">
+      <Project>{585FCFEA-A593-405F-8198-0A64BBA5EFCC}</Project>
       <Name>StocksData</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
