@@ -15,11 +15,11 @@ using StocksData.Adapters;
 using StocksData.Contexts;
 using StocksData.Mappings;
 using StocksData.Model;
-using StocksData.Services;
 using StocksData.UnitsOfWork;
 using System.Data.SqlClient;
 using System.Collections.Concurrent;
 using System.IO;
+using Services;
 
 namespace EncogHelloMbankConsole
 {
