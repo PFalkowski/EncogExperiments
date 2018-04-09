@@ -72,6 +72,10 @@
       <Project>{585FCFEA-A593-405F-8198-0A64BBA5EFCC}</Project>
       <Name>StocksData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\EncogStocks\Infrastracture\Infrastracture.csproj">
+      <Project>{A0771EFC-B847-4FBC-9B72-6F48DFB2A38F}</Project>
+      <Name>Infrastracture</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

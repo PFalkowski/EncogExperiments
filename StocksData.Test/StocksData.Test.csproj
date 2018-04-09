@@ -38,6 +38,9 @@
     <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.6.1.1\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Effort, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6a46696d54971e6d, processorArchitecture=MSIL">
+      <HintPath>..\..\EncogStocks\packages\Effort.1.3.3\lib\net45\Effort.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -50,10 +53,15 @@
     <Reference Include="Extensions.Standard, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Extensions.Standard.2.1.0\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
     </Reference>
+    <Reference Include="NMemory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6a46696d54971e6d, processorArchitecture=MSIL">
+      <HintPath>..\..\EncogStocks\packages\NMemory.1.1.0\lib\net45\NMemory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
