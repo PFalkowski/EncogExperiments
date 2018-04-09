@@ -9,8 +9,8 @@ namespace StocksData.Test
         public static void DropDatabase(string serverMasterConnectionStr, string dbName)
         {
 
-            var QuerryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
-            var DropDatabaseCommand = $@"DECLARE @kill varchar(8000); SET @kill = '';  
+            var querryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
+            var dropDatabaseCommand = $@"DECLARE @kill varchar(8000); SET @kill = '';  
 SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'  
 FROM master..sysprocesses  
 WHERE dbid = db_id('{dbName}')
@@ -19,8 +19,8 @@ EXEC(@kill);
 DROP DATABASE {dbName}";
 
             using (var connection = new SqlConnection(serverMasterConnectionStr))
-            using (var dbExistsCmd = new SqlCommand(QuerryDbExistsCommand, connection))
-            using (var dropDbCmd = new SqlCommand(DropDatabaseCommand, connection))
+            using (var dbExistsCmd = new SqlCommand(querryDbExistsCommand, connection))
+            using (var dropDbCmd = new SqlCommand(dropDatabaseCommand, connection))
             {
                 connection.Open();
                 var dbExists = (int)dbExistsCmd.ExecuteScalar();
@@ -30,12 +30,12 @@ DROP DATABASE {dbName}";
 
         public static void CreateDatabase(string serverMasterConnectionStr, string dbName)
         {
-            var QuerryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
-            var CreateDatabaseCommand = $@"CREATE DATABASE {dbName}";
+            var querryDbExistsCommand = $@"if db_id('{dbName}') is not null select 1 else select 0";
+            var createDatabaseCommand = $@"CREATE DATABASE {dbName}";
 
             using (var connection = new SqlConnection(serverMasterConnectionStr))
-            using (var dbExistsCmd = new SqlCommand(QuerryDbExistsCommand, connection))
-            using (var createDbCmd = new SqlCommand(CreateDatabaseCommand, connection))
+            using (var dbExistsCmd = new SqlCommand(querryDbExistsCommand, connection))
+            using (var createDbCmd = new SqlCommand(createDatabaseCommand, connection))
             {
                 connection.Open();
                 var dbExists = (int)dbExistsCmd.ExecuteScalar();

@@ -5,9 +5,9 @@ using StocksData.Model;
 
 namespace Services
 {
-    public class CompanyBulkInserter : IBulkInserter<Company>
+    public class CompanyBulkInserter : BulkInserter<Company>
     {
-        public IBulkInserter<StockQuote> StockQuoteBulkInserter { get; set; }
+        public BulkInserter<StockQuote> StockQuoteBulkInserter { get; set; }
         public CompanyBulkInserter(string connectionString)
         {
             ConnectionString = connectionString;

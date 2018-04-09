@@ -6,12 +6,12 @@ namespace Services
 {
     public class StocksFileProvider
     {
-        public IOService IoLayer { get; set; }
+        public IoService IoLayer { get; set; }
         public StocksBulkDeserializer DeserializationService { get; set; }
 
         public List<Company> ReadStocksFrom(string directory, string pattern = "*.*")
         {
-            var directorySvc = IoLayer ?? new IOService();
+            var directorySvc = IoLayer ?? new IoService();
             var deserializationSvc = DeserializationService ?? throw new NullReferenceException(nameof(DeserializationService));
             var stocksRaw = directorySvc.ReadDirectory(directory, pattern);
 

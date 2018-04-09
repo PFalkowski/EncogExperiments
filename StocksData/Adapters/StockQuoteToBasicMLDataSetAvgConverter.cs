@@ -4,7 +4,7 @@ using StocksData.Model;
 
 namespace StocksData.Adapters
 {
-    public class StockQuoteToBasicMLDataSetAvgConverter
+    public class StockQuoteToBasicMlDataSetAvgConverter
     {
         
         public BasicMLDataSet Convert(List<StockQuote> input)

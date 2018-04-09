@@ -12,7 +12,6 @@ namespace StocksData.Adapters
     {
         public List<double[]> Convert(List<StockQuote> input)
         {
-            var dataset = new BasicMLDataSet();
             var matrixConvert = new StockQuotesToMatrix();
             var matrix = matrixConvert.Convert(input);
             var max = matrix[1].Max();

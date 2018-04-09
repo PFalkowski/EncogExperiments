@@ -4,7 +4,6 @@ using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.Tool.hbm2ddl;
 using StocksData.Mappings;
-using StocksData.Model;
 
 namespace StocksData.Contexts
 {

@@ -1,11 +1,10 @@
-﻿using Infrastracture;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace Services
 {
-    public class IOService// : IOService
+    public class IoService// : IOService
     {
         public Dictionary<string, string> ReadDirectory(DirectoryInfo dir, string pattern = "*.*", SearchOption searchDepth = SearchOption.TopDirectoryOnly)
         {

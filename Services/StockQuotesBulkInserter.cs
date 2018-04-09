@@ -9,7 +9,7 @@ using StocksData.Model;
 
 namespace Services
 {
-    public class StockQuotesBulkInserter : IBulkInserter<StockQuote>
+    public class StockQuotesBulkInserter : BulkInserter<StockQuote>
     {
         public StockQuotesBulkInserter(string connectionString)
         {

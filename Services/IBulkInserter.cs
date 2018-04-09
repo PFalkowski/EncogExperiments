@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Services
 {
-    public abstract class IBulkInserter<T> where T : class, new()
+    public abstract class BulkInserter<T> where T : class, new()
     {
         public string ConnectionString { get; protected set; }
 

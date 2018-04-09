@@ -4,6 +4,6 @@ namespace Services
 {
     public interface IStocksDeserializer
     {
-        Company Deserialize(string FileContents);
+        Company Deserialize(string fileContents);
     }
 }

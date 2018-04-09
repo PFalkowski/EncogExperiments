@@ -17,9 +17,9 @@ namespace Services
             Map = map;
         }
 
-        public Company Deserialize(string FileContents)
+        public Company Deserialize(string fileContents)
         {
-            var deserializedQuotes = FileContents.DeserializeFromCsv(Map, Culture).ToList();
+            var deserializedQuotes = fileContents.DeserializeFromCsv(Map, Culture).ToList();
             var companyName = deserializedQuotes.First().Ticker;
 
             return new Company

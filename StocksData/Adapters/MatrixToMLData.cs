@@ -3,7 +3,7 @@ using Encog.ML.Data.Basic;
 
 namespace StocksData.Adapters
 {
-    public class MatrixToMLData
+    public class MatrixToMlData
     {
         public BasicMLDataSet ConvertToHighPred(List<double[]> matrix)
         {

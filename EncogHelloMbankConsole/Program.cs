@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Encog.Engine.Network.Activation;
 using Encog.ML.Data.Basic;
 using Encog.Neural.Networks;
@@ -16,8 +15,6 @@ using StocksData.Contexts;
 using StocksData.Mappings;
 using StocksData.Model;
 using StocksData.UnitsOfWork;
-using System.Data.SqlClient;
-using System.Collections.Concurrent;
 using System.IO;
 using Services;
 
@@ -154,7 +151,7 @@ namespace EncogHelloMbankConsole
                 logger.LogInfo($@"Created Db in {watch.ElapsedMilliseconds.AsTime()}");
                 watch.Restart();
 
-                var directoryService = new IOService();
+                var directoryService = new IoService();
                 var stocksRaw = directoryService.ReadDirectory(inputDirectory);
 
                 logger.LogInfo($@"Read {stocksRaw.Count} in {watch.ElapsedMilliseconds.AsTime()} from {inputDirectory.Name}");
@@ -175,7 +172,7 @@ namespace EncogHelloMbankConsole
             var normalizer = new StockQuotesToNormalizedMatrix();
 
             var allStocksNormalized = new List<BasicMLDataSet>();
-            var matrixConverter = new MatrixToMLData();
+            var matrixConverter = new MatrixToMlData();
 
             var ommitedDueToLength = 0;
             var ommitedDueToInvalidity = 0;
