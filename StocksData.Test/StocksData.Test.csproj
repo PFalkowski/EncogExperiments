@@ -50,8 +50,8 @@
     <Reference Include="Extensions.Serialization, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\EncogStocks\packages\Extensions.Serialization.3.2.0\lib\netstandard2.0\Extensions.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Extensions.Standard, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extensions.Standard.2.1.0\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
+    <Reference Include="Extensions.Standard, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extensions.Standard.3.0.1\lib\netstandard2.0\Extensions.Standard.dll</HintPath>
     </Reference>
     <Reference Include="NMemory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6a46696d54971e6d, processorArchitecture=MSIL">
       <HintPath>..\..\EncogStocks\packages\NMemory.1.1.0\lib\net45\NMemory.dll</HintPath>
