@@ -1,4 +1,4 @@
-﻿using Extensions.Standard;
+﻿using StandardInterfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -68,7 +68,7 @@
       <Project>{29145E6F-E63D-4222-AACB-39DCFE84F13C}</Project>
       <Name>StocksData.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\OneDrive\Repos\EncogClient\StocksData\StocksData.csproj">
+    <ProjectReference Include="..\StocksData\StocksData.csproj">
       <Project>{585FCFEA-A593-405F-8198-0A64BBA5EFCC}</Project>
       <Name>StocksData</Name>
     </ProjectReference>

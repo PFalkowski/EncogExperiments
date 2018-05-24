@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksData", "StocksData\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncogHelloMbankConsole", "EncogHelloMbankConsole\EncogHelloMbankConsole.csproj", "{5358011E-FBF5-41D5-8A7A-762383E8E738}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksData.Model", "StocksData.Model\StocksData.Model.csproj", "{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksData.Test", "StocksData.Test\StocksData.Test.csproj", "{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{9260C900-1CD6-4E9D-AD43-795786356C4D}"
@@ -33,10 +31,6 @@ Global
 		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5358011E-FBF5-41D5-8A7A-762383E8E738}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD62DDE9-77CD-4900-BD2B-9F9ABC197993}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06DE7358-E0BC-40A0-B6B7-88ED3D3D1241}.Release|Any CPU.ActiveCfg = Release|Any CPU

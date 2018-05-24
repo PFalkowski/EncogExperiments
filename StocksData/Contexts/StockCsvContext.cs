@@ -25,8 +25,8 @@ namespace StocksData.Contexts
             }
             else
             {
-                file.Create();
-                Entities = new List<TEntity>();
+                using (file.Create()) { }
+                    Entities = new List<TEntity>();
             }
         }
 

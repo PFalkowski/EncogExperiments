@@ -56,6 +56,9 @@
     <Reference Include="NMemory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6a46696d54971e6d, processorArchitecture=MSIL">
       <HintPath>..\..\EncogStocks\packages\NMemory.1.1.0\lib\net45\NMemory.dll</HintPath>
     </Reference>
+    <Reference Include="StandardInterfaces, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StandardInterfaces.1.3.0\lib\netstandard2.0\StandardInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -109,10 +112,6 @@
     <ProjectReference Include="..\Services\Services.csproj">
       <Project>{9260C900-1CD6-4E9D-AD43-795786356C4D}</Project>
       <Name>Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StocksData.Model\StocksData.Model.csproj">
-      <Project>{dd62dde9-77cd-4900-bd2b-9f9abc197993}</Project>
-      <Name>StocksData.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\StocksData\StocksData.csproj">
       <Project>{585FCFEA-A593-405F-8198-0A64BBA5EFCC}</Project>
