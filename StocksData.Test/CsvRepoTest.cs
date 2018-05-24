@@ -31,6 +31,7 @@ namespace StocksData.Test
                     unitOfWork.Complete();
                 }
             }
+            var received = File.ReadAllText(outputFile.FullName);
 
         }
         [Fact]
